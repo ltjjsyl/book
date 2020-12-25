@@ -1,0 +1,1199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>02-DBMS的前世今生</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <style>
+        html {
+            color: #333;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+            text-rendering: optimizelegibility;
+            font-family: Helvetica Neue, PingFang SC, Verdana, Microsoft Yahei, Hiragino Sans GB, Microsoft Sans Serif, WenQuanYi Micro Hei, sans-serif
+        }
+
+        html.borderbox *,
+        html.borderbox :after,
+        html.borderbox :before {
+            box-sizing: border-box
+        }
+
+        article,
+        aside,
+        blockquote,
+        body,
+        button,
+        code,
+        dd,
+        details,
+        dl,
+        dt,
+        fieldset,
+        figcaption,
+        figure,
+        footer,
+        form,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        header,
+        hr,
+        input,
+        legend,
+        li,
+        menu,
+        nav,
+        ol,
+        p,
+        pre,
+        section,
+        td,
+        textarea,
+        th,
+        ul {
+            margin: 0;
+            padding: 0
+        }
+
+        article,
+        aside,
+        details,
+        figcaption,
+        figure,
+        footer,
+        header,
+        menu,
+        nav,
+        section {
+            display: block
+        }
+
+        audio,
+        canvas,
+        video {
+            display: inline-block
+        }
+
+        body,
+        button,
+        input,
+        select,
+        textarea {
+            font: 300 1em/1.8 PingFang SC, Lantinghei SC, Microsoft Yahei, Hiragino Sans GB, Microsoft Sans Serif, WenQuanYi Micro Hei, Helvetica, sans-serif
+        }
+
+        button::-moz-focus-inner,
+        input::-moz-focus-inner {
+            padding: 0;
+            border: 0
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0
+        }
+
+        fieldset,
+        img {
+            border: 0
+        }
+
+        blockquote {
+            position: relative;
+            color: #999;
+            font-weight: 400;
+            border-left: 1px solid #1abc9c;
+            padding-left: 1em;
+            margin: 1em 3em 1em 2em
+        }
+
+        @media only screen and (max-width: 640px) {
+            blockquote {
+                margin: 1em 0
+            }
+        }
+
+        abbr,
+        acronym {
+            border-bottom: 1px dotted;
+            font-variant: normal
+        }
+
+        abbr {
+            cursor: help
+        }
+
+        del {
+            text-decoration: line-through
+        }
+
+        address,
+        caption,
+        cite,
+        code,
+        dfn,
+        em,
+        th,
+        var {
+            font-style: normal;
+            font-weight: 400
+        }
+
+        ol,
+        ul {
+            list-style: none
+        }
+
+        caption,
+        th {
+            text-align: left
+        }
+
+        q:after,
+        q:before {
+            content: ""
+        }
+
+        sub,
+        sup {
+            font-size: 75%;
+            line-height: 0;
+            position: relative
+        }
+
+        :root sub,
+        :root sup {
+            vertical-align: baseline
+        }
+
+        sup {
+            top: -.5em
+        }
+
+        sub {
+            bottom: -.25em
+        }
+
+        a {
+            color: #1abc9c
+        }
+
+        a:hover {
+            text-decoration: underline
+        }
+
+        .typo a {
+            border-bottom: 1px solid #1abc9c
+        }
+
+        .typo a:hover {
+            border-bottom-color: #555;
+            color: #555
+        }
+
+        .typo a:hover,
+        a,
+        ins {
+            text-decoration: none
+        }
+
+        .typo-u,
+        u {
+            text-decoration: underline
+        }
+
+        mark {
+            background: #fffdd1;
+            border-bottom: 1px solid #ffedce;
+            padding: 2px;
+            margin: 0 5px
+        }
+
+        code,
+        pre,
+        pre tt {
+            font-family: Courier, Courier New, monospace
+        }
+
+        pre {
+            background: hsla(0, 0%, 97%, .7);
+            border: 1px solid #ddd;
+            padding: 1em 1.5em;
+            display: block;
+            -webkit-overflow-scrolling: touch
+        }
+
+        hr {
+            border: none;
+            border-bottom: 1px solid #cfcfcf;
+            margin-bottom: .8em;
+            height: 10px
+        }
+
+        .typo-small,
+        figcaption,
+        small {
+            font-size: .9em;
+            color: #888
+        }
+
+        b,
+        strong {
+            font-weight: 700;
+            color: #000
+        }
+
+        [draggable] {
+            cursor: move
+        }
+
+        .clearfix:after,
+        .clearfix:before {
+            content: "";
+            display: table
+        }
+
+        .clearfix:after {
+            clear: both
+        }
+
+        .clearfix {
+            zoom: 1
+        }
+
+        .textwrap,
+        .textwrap td,
+        .textwrap th {
+            word-wrap: break-word;
+            word-break: break-all
+        }
+
+        .textwrap-table {
+            table-layout: fixed
+        }
+
+        .serif {
+            font-family: Palatino, Optima, Georgia, serif
+        }
+
+        .typo-dl,
+        .typo-form,
+        .typo-hr,
+        .typo-ol,
+        .typo-p,
+        .typo-pre,
+        .typo-table,
+        .typo-ul,
+        .typo dl,
+        .typo form,
+        .typo hr,
+        .typo ol,
+        .typo p,
+        .typo pre,
+        .typo table,
+        .typo ul,
+        blockquote {
+            margin-bottom: 1rem
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: PingFang SC, Helvetica Neue, Verdana, Microsoft Yahei, Hiragino Sans GB, Microsoft Sans Serif, WenQuanYi Micro Hei, sans-serif;
+            color: #000;
+            line-height: 1.35
+        }
+
+        .typo-h1,
+        .typo-h2,
+        .typo-h3,
+        .typo-h4,
+        .typo-h5,
+        .typo-h6,
+        .typo h1,
+        .typo h2,
+        .typo h3,
+        .typo h4,
+        .typo h5,
+        .typo h6 {
+            margin-top: 1.2em;
+            margin-bottom: .6em;
+            line-height: 1.35
+        }
+
+        .typo-h1,
+        .typo h1 {
+            font-size: 2em
+        }
+
+        .typo-h2,
+        .typo h2 {
+            font-size: 1.8em
+        }
+
+        .typo-h3,
+        .typo h3 {
+            font-size: 1.6em
+        }
+
+        .typo-h4,
+        .typo h4 {
+            font-size: 1.4em
+        }
+
+        .typo-h5,
+        .typo-h6,
+        .typo h5,
+        .typo h6 {
+            font-size: 1.2em
+        }
+
+        .typo-ul,
+        .typo ul {
+            margin-left: 1.3em;
+            list-style: disc
+        }
+
+        .typo-ol,
+        .typo ol {
+            list-style: decimal;
+            margin-left: 1.9em
+        }
+
+        .typo-ol ol,
+        .typo-ol ul,
+        .typo-ul ol,
+        .typo-ul ul,
+        .typo li ol,
+        .typo li ul {
+            margin-bottom: .8em;
+            margin-left: 2em
+        }
+
+        .typo-ol ul,
+        .typo-ul ul,
+        .typo li ul {
+            list-style: circle
+        }
+
+        .typo-table td,
+        .typo-table th,
+        .typo table caption,
+        .typo table td,
+        .typo table th {
+            border: 1px solid #ddd;
+            padding: .5em 1em;
+            color: #666
+        }
+
+        .typo-table th,
+        .typo table th {
+            background: #fbfbfb
+        }
+
+        .typo-table thead th,
+        .typo table thead th {
+            background: hsla(0, 0%, 95%, .7)
+        }
+
+        .typo table caption {
+            border-bottom: none
+        }
+
+        .typo-input,
+        .typo-textarea {
+            -webkit-appearance: none;
+            border-radius: 0
+        }
+
+        .typo-em,
+        .typo em,
+        caption,
+        legend {
+            color: #000;
+            font-weight: inherit
+        }
+
+        .typo-em {
+            position: relative
+        }
+
+        .typo-em:after {
+            position: absolute;
+            top: .65em;
+            left: 0;
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            content: "\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB"
+        }
+
+        .typo img {
+            max-width: 100%
+        }
+
+        .common-content {
+            font-weight: 400;
+            color: #353535;
+            line-height: 1.75rem;
+            white-space: normal;
+            word-break: normal;
+            font-size: 1rem
+        }
+
+        .common-content img {
+            display: block;
+            max-width: 100%;
+            background-color: #eee
+        }
+
+        .common-content audio,
+        .common-content video {
+            width: 100%;
+            background-color: #eee
+        }
+
+        .common-content center,
+        .common-content font {
+            margin-top: 1rem;
+            display: inline-block
+        }
+
+        .common-content center {
+            width: 100%
+        }
+
+        .common-content pre {
+            margin-top: 1rem;
+            padding-left: 0;
+            padding-right: 0;
+            position: relative;
+            overflow: hidden
+        }
+
+        .common-content pre code {
+            font-size: .8rem;
+            font-family: Consolas, Liberation Mono, Menlo, monospace, Courier;
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            overflow-x: auto
+        }
+
+        .common-content hr {
+            border: none;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-top: 1px solid #f5f5f5;
+            height: 1px;
+            background: none
+        }
+
+        .common-content b,
+        .common-content h1,
+        .common-content h2,
+        .common-content h3,
+        .common-content h4,
+        .common-content h5,
+        .common-content strong {
+            font-weight: 700
+        }
+
+        .common-content h1,
+        .common-content h2 {
+            font-size: 1.125rem;
+            margin-bottom: .45rem
+        }
+
+        .common-content h3,
+        .common-content h4,
+        .common-content h5 {
+            font-size: 1rem;
+            margin-bottom: .45rem
+        }
+
+        .common-content p {
+            font-weight: 400;
+            color: #353535;
+            margin-top: .15rem
+        }
+
+        .common-content .orange {
+            color: #ff5a05
+        }
+
+        .common-content .reference {
+            font-size: 1rem;
+            color: #888
+        }
+
+        .custom-rich-content h1 {
+            margin-top: 0;
+            font-weight: 400;
+            font-size: 15.25px;
+            border-bottom: 1px solid #eee;
+            line-height: 2.8
+        }
+
+        .custom-rich-content li,
+        .custom-rich-content p {
+            font-size: 14px;
+            color: #888;
+            line-height: 1.6
+        }
+
+        table.hljs-ln {
+            margin-bottom: 0;
+            border-spacing: 0;
+            border-collapse: collapse
+        }
+
+        table.hljs-ln,
+        table.hljs-ln tbody,
+        table.hljs-ln td,
+        table.hljs-ln tr {
+            box-sizing: border-box
+        }
+
+        table.hljs-ln td {
+            padding: 0;
+            border: 0
+        }
+
+        table.hljs-ln td.hljs-ln-numbers {
+            min-width: 15px;
+            color: rgba(27, 31, 35, .3);
+            text-align: right;
+            white-space: nowrap;
+            cursor: pointer;
+            user-select: none
+        }
+
+        table.hljs-ln td.hljs-ln-code,
+        table.hljs-ln td.hljs-ln-numbers {
+            font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+            font-size: 12px;
+            line-height: 20px;
+            vertical-align: top
+        }
+
+        table.hljs-ln td.hljs-ln-code {
+            position: relative;
+            padding-right: 10px;
+            padding-left: 10px;
+            overflow: visible;
+            color: #24292e;
+            word-wrap: normal;
+            white-space: pre
+        }
+
+        video::-webkit-media-controls {
+            overflow: hidden !important
+        }
+
+        video::-webkit-media-controls-enclosure {
+            width: calc(100% + 32px);
+            margin-left: auto
+        }
+
+        ._29HP61GA_0 {
+            max-width:800px;
+            margin:0 auto;
+            margin-bottom: 20px;
+            font-weight: 400;
+            color: #353535;
+            line-height: 1.76;
+            white-space: normal;
+            word-break: normal;
+            font-size: 17px;
+            -webkit-transition: background-color .3s ease;
+            transition: background-color .3s ease
+        }
+
+        ._29HP61GA_0 .MathJax_Display {
+            overflow: auto
+        }
+
+        ._29HP61GA_0 .poster {
+            position: fixed;
+            left: -10000px;
+            top: -10000px;
+            overflow: hidden;
+            padding: 1rem;
+            background: #ececec
+        }
+
+        ._29HP61GA_0 .richcontent-pre-copy {
+            font-size: 13px;
+            color: #888;
+            position: absolute;
+            right: 1em;
+            top: .5em;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none
+        }
+
+        ._29HP61GA_0 .richcontent-pre-copy .iconfont {
+            font-size: 12px;
+            margin-right: .2em
+        }
+
+        ._29HP61GA_0 a {
+            color: #fa8919;
+            border-bottom: 1px solid #fa8919
+        }
+
+        ._29HP61GA_0 img {
+            display: block;
+            max-width: 100%;
+            position: relative;
+            left: 50%;
+            -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
+            background-color: #eee;
+            vertical-align: top;
+            border-radius: 0
+        }
+
+        ._29HP61GA_0 audio,
+        ._29HP61GA_0 video {
+            width: 100%;
+            background-color: #eee
+        }
+
+        ._29HP61GA_0 pre {
+            margin-top: 16px;
+            padding: 34px 0 0;
+            margin-bottom: 30px;
+            position: relative;
+            border-radius: 6px;
+            background: rgba(246, 247, 251, .749);
+            border: 0
+        }
+
+        ._29HP61GA_0 pre code {
+            font-size: 12px;
+            font-family: Consolas, Liberation Mono, Menlo, monospace, Courier;
+            display: block;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            margin-left: 16px;
+            margin-right: 16px;
+            overflow-x: scroll
+        }
+
+        ._29HP61GA_0 pre code:after {
+            content: "";
+            height: 30px;
+            width: 100%;
+            display: block
+        }
+
+        ._29HP61GA_0 hr {
+            border: none;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-top: 1px solid #f5f5f5;
+            height: 1px;
+            background: none
+        }
+
+        ._29HP61GA_0 h1,
+        ._29HP61GA_0 h2,
+        ._29HP61GA_0 h3,
+        ._29HP61GA_0 h4,
+        ._29HP61GA_0 h5 {
+            margin-bottom: 20px;
+            margin-top: 0;
+            font-weight: 700
+        }
+
+        ._29HP61GA_0 b,
+        ._29HP61GA_0 strong {
+            font-weight: 700
+        }
+
+        ._29HP61GA_0 h1 {
+            font-size: 21px
+        }
+
+        ._29HP61GA_0 h2 {
+            font-size: 20px
+        }
+
+        ._29HP61GA_0 h3 {
+            font-size: 19px
+        }
+
+        ._29HP61GA_0 h4 {
+            font-size: 18px
+        }
+
+        ._29HP61GA_0 h5 {
+            font-size: 17px
+        }
+
+        ._29HP61GA_0 center,
+        ._29HP61GA_0 p {
+            font-weight: 400;
+            color: #353535;
+            margin-top: 0;
+            margin-bottom: 30px;
+            word-break: break-word
+        }
+
+        ._29HP61GA_0 center {
+            text-align: center
+        }
+
+        ._29HP61GA_0 blockquote {
+            margin-top: 0;
+            margin-bottom: 34px;
+            border-left: 3px solid #e8e8e8;
+            padding-left: 17px;
+            color: #353535
+        }
+
+        ._29HP61GA_0 blockquote p {
+            margin-top: 0;
+            margin-bottom: 0
+        }
+
+        ._29HP61GA_0 ol,
+        ._29HP61GA_0 ul {
+            margin-bottom: 30px
+        }
+
+        ._29HP61GA_0 ol p,
+        ._29HP61GA_0 ul p {
+            margin-top: 0;
+            margin-bottom: 0
+        }
+
+        ._29HP61GA_0 ol {
+            list-style: decimal;
+            margin-left: 20px
+        }
+
+        ._29HP61GA_0 ul li {
+            padding-left: 17px;
+            position: relative;
+            margin-bottom: 10px
+        }
+
+        ._29HP61GA_0 ul li:after {
+            content: "";
+            height: 6px;
+            width: 6px;
+            border-radius: 50%;
+            background: #353535;
+            position: absolute;
+            top: 10px;
+            left: 0
+        }
+
+        ._29HP61GA_0 .orange {
+            color: #fa8919
+        }
+
+        ._29HP61GA_0 .reference {
+            color: #888
+        }
+
+        ._29HP61GA_0 .m-right {
+            text-align: right
+        }
+
+        ._29HP61GA_0 .m-center {
+            text-align: center;
+            display: block
+        }
+
+        ._29HP61GA_0 .m-gray {
+            color: #888
+        }
+
+        ._29HP61GA_0 .m-small {
+            font-size: 15px
+        }
+
+        ._29HP61GA_0 table.hljs-ln {
+            margin-bottom: 0;
+            border-spacing: 0;
+            border-collapse: collapse
+        }
+
+        ._29HP61GA_0 table.hljs-ln,
+        ._29HP61GA_0 table.hljs-ln tbody,
+        ._29HP61GA_0 table.hljs-ln td,
+        ._29HP61GA_0 table.hljs-ln tr {
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box
+        }
+
+        ._29HP61GA_0 table.hljs-ln td {
+            padding: 0;
+            border: 0
+        }
+
+        ._29HP61GA_0 table.hljs-ln td.hljs-ln-numbers {
+            min-width: 15px;
+            font-size: 12px;
+            color: rgba(27, 31, 35, .3);
+            text-align: right;
+            white-space: nowrap;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none
+        }
+
+        ._29HP61GA_0 table.hljs-ln td.hljs-ln-code,
+        ._29HP61GA_0 table.hljs-ln td.hljs-ln-numbers {
+            font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+            line-height: 20px;
+            vertical-align: top
+        }
+
+        ._29HP61GA_0 table.hljs-ln td.hljs-ln-code {
+            position: relative;
+            padding-right: 10px;
+            padding-left: 10px;
+            overflow: visible;
+            font-size: 13px;
+            color: #666;
+            word-wrap: normal;
+            white-space: pre
+        }
+
+    </style>
+</head>
+<body>
+<div class="_29HP61GA_0">
+<h1>02-DBMS的前世今生</h1>
+<p>上一讲我们介绍过两个IBM研究员在1974年发表了一篇有关结构化英语查询语言的论文，并将这门语言命名为SEQUEL。SEQUEL的语言标准是开放的，但是围绕它的商业化竞争却从来没有停止过。首先因为商标之争，SEQUEL改名为SQL，后来有一个重量级的公司基于那篇论文研发出了商业化的数据库管理软件，这就是Oracle。自此之后，又诞生了一堆大家熟知的DBMS，比如MySQL、SQL Server、PostgreSQL、DB2和MongoDB等。</p><p>我们今天了解一下这些数据库管理软件，也就是DBMS。为什么需要了解它们呢？因为在工作中，我们通常都是和这些数据库管理软件打交道，只不过SQL是它们的通用语言。</p><p>今天我们先从SQL语言中跳脱出来，来分析下这些DBMS。关于今天的内容，你可以从以下几个方面进行思考：</p><ol>
+<li>主流的DBMS都有哪些，它们各自都有哪些特点；</li>
+<li>既然SQL是通用的标准语言，为什么能存在这么多DBMS；</li>
+<li>从这些DBMS的发展史中，你有哪些感悟。</li>
+</ol><h2>DB、DBS和DBMS的区别是什么</h2><p>说到DBMS，有一些概念你需要了解。</p><p>DBMS的英文全称是DataBase Management System，数据库管理系统，实际上它可以对多个数据库进行管理，所以你可以理解为DBMS = 多个数据库（DB） + 管理程序。</p><!-- [[[read_end]]] --><p>DB的英文是DataBase，也就是数据库。数据库是存储数据的集合，你可以把它理解为多个数据表。</p><p>DBS的英文是DataBase System，数据库系统。它是更大的概念，包括了数据库、数据库管理系统以及数据库管理人员DBA。</p><p>这里需要注意的是，虽然我们有时候把Oracle、MySQL等称之为数据库，但确切讲，它们应该是数据库管理系统，即DBMS。</p><h2>排名前20的DBMS都是那些</h2><p>了解了DBMS的概念之后，我们来看下当前主流的DBMS都有哪些。下面这张表是2019年5月DB-Engines公布的DBMS的排名（每年的排名会有更新，主要依据这些DBMS在搜索引擎上的热度）：</p><p><img src="https://static001.geekbang.org/resource/image/a7/91/a7237ddbe4ca69353bd21a6eff35d391.png" alt=""></p><p>从排名中我们能看出来，关系型数据库绝对是DBMS的主流，其中使用最多的DBMS分别是Oracle、MySQL和SQL Server。</p><p>关系型数据库（RDBMS）就是建立在关系模型基础上的数据库，SQL就是关系型数据库的查询语言。</p><p>相比于SQL，NoSQL泛指非关系型数据库，包括了榜单上的键值型数据库、文档型数据库、搜索引擎和列存储等，除此以外还包括图形数据库。</p><p>键值型数据库通过Key-Value键值的方式来存储数据，其中Key和Value可以是简单的对象，也可以是复杂的对象。Key作为唯一的标识符，优点是查找速度快，在这方面明显优于关系型数据库，同时缺点也很明显，它无法像关系型数据库一样自由使用条件过滤（比如WHERE），如果你不知道去哪里找数据，就要遍历所有的键，这就会消耗大量的计算。键值型数据库典型的使用场景是作为内容缓存。Redis是最流行的键值型数据库。</p><p>文档型数据库用来管理文档，在数据库中文档作为处理信息的基本单位，一个文档就相当于一条记录，MongoDB是最流行的文档型数据库。</p><p>搜索引擎也是数据库检索中的重要应用，常见的全文搜索引擎有Elasticsearch、Splunk和Solr。虽然关系型数据库采用了索引提升检索效率，但是针对全文索引效率却较低。搜索引擎的优势在于采用了全文搜索的技术，核心原理是“倒排索引”。</p><p>列式数据库是相对于行式存储的数据库，Oracle、MySQL、SQL Server等数据库都是采用的行式存储（Row-based），而列式数据库是将数据按照列存储到数据库中，这样做的好处是可以大量降低系统的I/O，适合于分布式文件系统，不足在于功能相对有限。</p><p>图形数据库，利用了图这种数据结构存储了实体（对象）之间的关系。最典型的例子就是社交网络中人与人的关系，数据模型主要是以节点和边（关系）来实现，特点在于能高效地解决复杂的关系问题。</p><h2>SQL阵营与NoSQL阵营</h2><p>NoSQL的分类很多，刚才提到的键值型、文档型、搜索引擎、列式存储和图形数据库等都属于NoSQL阵营。也只有用NoSQL一词才能将这些技术囊括进来。即便如此，在DBMS排名中，还是SQL阵营的比重更大，影响力前5的DBMS中有4个是关系型数据库，而排名前20的DBMS中也有12个是关系型数据库。所以说，掌握SQL是非常有必要的。</p><p>由于SQL一直称霸DBMS，因此许多人在思考是否有一种数据库技术能远离SQL，于是NoSQL诞生了，但是随着发展却发现越来越离不开SQL。到目前为止NoSQL阵营中的DBMS都会有实现类似SQL的功能。下面是“NoSQL”这个名词在不同时期的诠释，从这些释义的变化中可以看出NoSQL功能的演变：</p><p>1970：NoSQL = We have no SQL</p><p>1980：NoSQL = Know SQL</p><p>2000：NoSQL = No SQL!</p><p>2005：NoSQL = Not only SQL</p><p>2013：NoSQL = No, SQL!</p><p>NoSQL对SQL做出了很好的补充，它可以让我们在云计算时代，更好地使用数据库技术，比如快速读写，这样可以用低廉的成本，更方便进行扩展。整个专栏的学习也将围绕SQL展开，同时你还需要了解SQL阵营中不同的DBMS之间的使用差异。这些DBMS除了支持SQL标准以外，还会有自己的“方言”，也就是自己独有的语法。在专栏中，我也会对近些年热门的NoSQL进行讲解，方便你在后续使用中更快上手。</p><h2>SQL阵营中的DBMS</h2><p>如果我们把数据互通作为当今数字化社会发展的大中台能力，那么DBMS无疑是一个巨大的市场。在这个市场中，排名前20的DBMS有12个属于SQL阵营，其中排名前3名的DBMS均为SQL阵营，它们分别是Oracle、MySQL和SQL Server。这三家的市场份额远超其他DBMS的市场份额。</p><p>下面，我们来简单介绍下这三个主流DBMS的发展。</p><p>1979年，Oracle 2诞生，它是第一个商用的RDBMS（关系型数据库管理系统），随后被卖给了军方客户。随着Oracle软件的名气越来越大，公司也改叫Oracle公司。20世纪90年代，Oracle的创始人埃里森成为继比尔·盖茨之后第二富有的人，可以说IBM缔造了两个帝国，一个是软件业的霸主微软，另一个是企业软件市场的霸主Oracle。如今Oracle的年收入达到了400亿美金，足以证明商用数据库软件的价值。从这点我们也能看出，如果选择了一个大的赛道，就要尽早商业化，占据大型企业客户完全可以创建巨大的商业价值，也足以证明一个软件企业不需要靠卖硬件也可以挣到很多钱。</p><p>MySQL是1995年诞生的开源数据库管理系统，因为免费开源的特性，得到了开发者的喜爱，用户量迅速增长，成为开源数据库的No.1。但在发展过程中，MySQL先后两次被易手，先是在2008年被SUN收购，然后在2010年SUN被Oracle收购，于是Oracle同时拥有了MySQL的管理权，至此Oracle在数据库领域中成为绝对的领导者。从这里我们也能看到，虽然MySQL是免费的产品，但是使用人数多，就足以证明巨大的用户价值。一个有巨大用户价值的产品，即使没有直接的商业价值，但作为基础设施也会被商业巨头看上。</p><p>不过在Oracle收购MySQL的同时，MySQL的创造者担心MySQL有闭源的风险，因此创建了MySQL的分支项目MariaDB，MariaDB在绝大部分情况下都是与MySQL兼容的，并且增加了许多新的特性，比如支持更多的存储引擎类型。许多企业也由原来的MySQL纷纷转向了MariaDB。</p><p>SQL Server是微软开发的商业数据库，诞生于1989年。实际上微软还推出了Access数据库，它是一种桌面数据库，同时具备后台存储和前台界面开发的功能，更加轻量级，适合小型的应用场景。因为后台的存储空间有限，一般只有2G，Access的优势在于可以在前台便捷地进行界面开发。而SQL Server是大型数据库，用于后台的存储和查询，不具备界面开发的功能。从这里我们也能看出，即使SQL语言是通用的，但是为了满足不同用户的使用场景，会存在多个DBMS。比如Oracle更适合大型跨国企业的使用，因为他们对费用不敏感，但是对性能要求以及安全性有更高的要求，而MySQL更受到许多互联网公司，尤其是早期创业公司的青睐。</p><h2>总结</h2><p>今天我们简单梳理了DBMS的发展。1974年，SEQUEL论文发表，1979年，第一个商用关系型数据库Oracle 2诞生，1995年，MySQL开源数据库诞生，如今，NoSQL得到了发展，并且围绕SQL标准展开的DBMS竞赛从来没有停止过。在这段发展史中，既有SQL阵营，又有NoSQL阵营，既有商业数据库软件，又有开源产品，在不同的应用场景下，同一家公司也会有不同的DBMS布局。</p><p>如果说不同的DBMS代表了不同公司的利益，那么作为使用者的我们更应该注重的是这些DBMS的使用场景。比如Oracle作为市场占有率最高的商用数据库软件，适合大型的跨国企业，而针对轻量级的桌面数据库，我们采用Access就可以了。对于免费开源的产品来说，可以选用MySQL或者MariaDB。同时在NoSQL阵营中，我们也需要了解键值型、文档型、搜索引擎、列式数据库和图形数据库的区别。</p><p>我在文章中列举了排名前20的DBMS，你都使用过哪些呢？可以说说你的使用体会吗？另外你有没有想过，虽然SQL是通用的标准语言，但为什么能存在这么多DBMS呢？</p><p><img src="https://static001.geekbang.org/resource/image/4d/a1/4d59fcf80909d9bc62b91a83d07c52a1.png" alt=""><br>
+欢迎你在评论区写下你的思考，也欢迎把这篇文章分享给你的朋友或者同事。</p><p><img src="https://static001.geekbang.org/resource/image/4f/58/4fd70a3267ad5aeb8c531f0996642f58.jpg" alt=""></p><h2>精选留言：</h2>
+        <ul>
+        
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            王鹏飞Tbb  2019-06-14 08:53:22
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            老师好，文章中有句话不太理解，“列式数据库是将数据按照列存储到数据库中，这样做的好处是可以大量降低系统的 I&#47;O”，这里降低系统I&#47;O，老师能解释下吗？ [46赞]
+        </div>
+        <br/>
+<div>
+    <div style="color:#888;font-size:15.25px;font-weight:400;line-height:1.2">作者回复2019-06-14 17:43:39</div>
+    <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">行式存储是把一行的数据都串起来进行存储，然后再存储下一行。<br>同样，列式存储是把一列的数据都串起来进行存储，然后再存储下一列。<br>这样做的好处，就是相邻的数据的数据类型是一样的，因此也更容易压缩。压缩之后就自然降低了IO</div>
+</div>
+            
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            格非  2019-06-14 15:09:20
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            @王鹏飞Tbb，我的理解是：列式数据库将数据按照列进行存储，因为每列的数据格式是相同的，在存储过程时，可以使用有效的压缩算法进行压缩存储，在读取时，可以只读取需要的列到内存中，但如果是行式数据库，就需要将整行数据读入内存中，所以说列式数据库按照列式存储数据会大量降低系统的IO [29赞]
+        </div>
+        <br/>
+<div>
+    <div style="color:#888;font-size:15.25px;font-weight:400;line-height:1.2">作者回复2019-06-14 17:56:44</div>
+    <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">对的 大家都可以看下这个回答</div>
+</div>
+            
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            逗逼师父  2019-06-14 03:49:42
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            按照我的使用频率排序：MySQL，Redis, MongoDB, ES, MariaDB, SQLite, PostgreSQL, Oracle <br><br>平时就是MySQL用的最多，NoSQL中Redis和MongoDB容易上手，ES这个鬼就很折磨人，查询语句变态，瞬间能够明白为啥NoSQL最终演化为了No, SQL 。虽然MongoDB容易很多，但是它也是专有的查询语言，如果遇到因某种原因要跟换底层数据库的时候，很可能意味着要重写比较多的代码。<br><br>我个人理解SQL就像面向对象里的接口，而各个DBMS是具体的实现。<br><br> [11赞]
+        </div>
+        
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            猴子哥🐒  2019-06-14 15:16:31
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            老师好，文章中的思维导图是否用xmind做的呢？能否在以后的课程中将源文件上传上来呢？ [9赞]
+        </div>
+        <br/>
+<div>
+    <div style="color:#888;font-size:15.25px;font-weight:400;line-height:1.2">作者回复2019-06-14 17:56:11</div>
+    <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">可以 我放到这里了 https:&#47;&#47;github.com&#47;cystanford&#47;SQL-XMind</div>
+</div>
+            
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            雨先生的晴天  2019-06-14 02:56:44
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            请问云计算中，（亚马逊的AWS， 谷歌的BigQuery） 是用的哪一种DBMS呀？ 或者说他们本身就在提供DBMS系统。   [8赞]
+        </div>
+        
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            疯狂青蛙  2019-06-14 10:43:38
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            刚毕业时使用delphi开发，当时用的就是sql server 2000，因为express版本有存储的大小限制，直接用的企业版本，后来转.net开发后做医疗产品，开始接触oracle，医院数据信息量很大，稳定性要求很高，当时数据库90%都是oracle，也有一些老项目用的DB2，再后来从事互联网+医疗产品开发，服务云化，开始使用mysql做存储管理，这期间还涉及了MongoDB的开发，在特定的文档存储上使用MondoDB。 [4赞]
+        </div>
+        <br/>
+<div>
+    <div style="color:#888;font-size:15.25px;font-weight:400;line-height:1.2">作者回复2019-06-14 18:15:23</div>
+    <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">很好的经历分享</div>
+</div>
+            
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            川杰  2019-06-14 08:59:54
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            请问时序数据库主要用于什么场景？ [4赞]
+        </div>
+        
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            程序员人生  2019-06-14 11:55:41
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            根据川杰的问题，“请问时序数据库主要用于什么场景？”。分享一点点经验，我曾经用时序数据库保存实时采集到的监控数据（grapihte+grafana）。由于它的存储格式是时间序列-指标值的形式，所以比较方便地在事后查找是哪个时间点开始异常。 [3赞]
+        </div>
+        
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            乘坐Tornado的线程魔法师  2019-06-14 10:15:04
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            请教下老师，为什么Mongo相对来说支持高并发要优于MySQL？比如从数据结构的角度讲 [3赞]
+        </div>
+        
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            盛  2019-06-14 08:19:17
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            主流关系型数据库：作者似乎漏了sybase吧。sybase和sql server 最初是差不多的东西：他们最初的关系和今天的mysql类似，唯一的区别是两家都是商业型数据库，mysql的分支是开源。<br>因为一些事情分成了两家，故而非常明显的是两者对T-SQL一直支持率非常高。深入学习sql server挖过它的历史：2010刚好公司两种数据库同时使用和维护时用过一段sybase，利用sql server的基础去学习几乎非常轻松。 [3赞]
+        </div>
+        
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            JackPn  2019-06-14 21:07:34
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            我们公司用了ceph替换了HBase作为文件存储的数据库，我刚入职不久还不太清楚这俩东西，老师能说一下这两个的区别吗？转正答辩的时候说不定会被问，我得从技术的角度搞清楚公司为啥这么做 [2赞]
+        </div>
+        
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            山水人天  2019-06-14 05:49:44
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            报告老师，我有问题：acess 适用于什么规模的软件开发呢？如果开发的数据库需求大概在两万条数据左右的话，使用acess能否满足要求？ [2赞]
+        </div>
+        
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            君莫惜  2019-06-14 22:46:25
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            SQL值的是关系型数据库(Mysql,sql server,oracle)<br>NoSQL包括: 键-值数据库(Redis)、文档型数据库(MongoDB)、搜索引擎数据库(electsearch）、列式存储型数据库 [1赞]
+        </div>
+        
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            Hoo-Ah  2019-06-14 19:39:17
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            还是第一次知道列式存储，看介绍说列式存储容易被压缩，那么把行式存储横着压缩会不会也比较容易压缩？ [1赞]
+        </div>
+        
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            未来的胡先森  2019-06-14 13:06:11
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            用过的数据库管理系统有:Access、SQL server、MySQL。<br>对于 SQL 语言统一但是还是有这么多 DBMS ，我的认为是:<br>各个公司都在某一方面开发了自己独特的功能或特色，大公司都不愿意在数据库这一重要领域失去自己的市场份额，而单一的数据库并不能满足所有的市场需求最终诞生了不同的 DBMS，为了降低用户更换软件的成本都遵循了 SQL 的标准。 [1赞]
+        </div>
+        <br/>
+<div>
+    <div style="color:#888;font-size:15.25px;font-weight:400;line-height:1.2">作者回复2019-06-14 18:14:36</div>
+    <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">对的 都遵循SQL标准，但在实现的方式上各有特色，同时针对不同的使用场景有不同的解决方案</div>
+</div>
+            
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            ABC  2019-06-14 08:27:16
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            用过MySQL,PostgreSQL,H2,MongoDB,Oracle,SQlite。平时用的比较多的就是MySQL,H2,MongoDB,SQLite。各有不同用处，比如测试的时候会比较喜欢H2，上线的时候会用MySQL或者MongoDB,在做一些小应用的时候会用SQLite。 [1赞]
+        </div>
+        
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            JingZ  2019-07-27 17:24:25
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            刚开始接触，MySQL&#47;Oracle&#47;HBase听得多一些，总之，学会SQL语言的确可以进入看数据的一个新境界～ 
+        </div>
+        
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            2525  2019-07-09 12:02:20
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            键值对型底层实现是基于Hash的么 
+        </div>
+        
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            北祐葉  2019-07-08 18:33:23
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            列式数据库是属于NOSQL数据库么？我的理解是：关系型数据库：MySQL、Oracle....;非关系性数据库：Redis、MongoDB...；搜索引擎数据库：ES、Sole...；同时，我列举得也是我用过的。 
+        </div>
+        
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            dbtiger  2019-07-06 07:28:10
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            2010年用的mysql，2013年之前用的是sqlserver，2014年之后用的oracle，一直到现在。个人感觉大同小异，但是觉得功能最全，最安全，最稳定无疑是oracle，当然也最贵，哈哈…<br><br>出现这么多基于sql的rdbms数据库，可能是这个商业领域比较肥沃，各个IT界大佬都想占领一席之地，分割这块蛋糕吧。 
+        </div>
+        
+    </div>
+</li>
+            </ul>
+</div>
+</body>
+</html>

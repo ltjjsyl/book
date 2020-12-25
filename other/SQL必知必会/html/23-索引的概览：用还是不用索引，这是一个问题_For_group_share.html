@@ -1,0 +1,1016 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>23-索引的概览：用还是不用索引，这是一个问题</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <style>
+        html {
+            color: #333;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+            text-rendering: optimizelegibility;
+            font-family: Helvetica Neue, PingFang SC, Verdana, Microsoft Yahei, Hiragino Sans GB, Microsoft Sans Serif, WenQuanYi Micro Hei, sans-serif
+        }
+
+        html.borderbox *,
+        html.borderbox :after,
+        html.borderbox :before {
+            box-sizing: border-box
+        }
+
+        article,
+        aside,
+        blockquote,
+        body,
+        button,
+        code,
+        dd,
+        details,
+        dl,
+        dt,
+        fieldset,
+        figcaption,
+        figure,
+        footer,
+        form,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        header,
+        hr,
+        input,
+        legend,
+        li,
+        menu,
+        nav,
+        ol,
+        p,
+        pre,
+        section,
+        td,
+        textarea,
+        th,
+        ul {
+            margin: 0;
+            padding: 0
+        }
+
+        article,
+        aside,
+        details,
+        figcaption,
+        figure,
+        footer,
+        header,
+        menu,
+        nav,
+        section {
+            display: block
+        }
+
+        audio,
+        canvas,
+        video {
+            display: inline-block
+        }
+
+        body,
+        button,
+        input,
+        select,
+        textarea {
+            font: 300 1em/1.8 PingFang SC, Lantinghei SC, Microsoft Yahei, Hiragino Sans GB, Microsoft Sans Serif, WenQuanYi Micro Hei, Helvetica, sans-serif
+        }
+
+        button::-moz-focus-inner,
+        input::-moz-focus-inner {
+            padding: 0;
+            border: 0
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0
+        }
+
+        fieldset,
+        img {
+            border: 0
+        }
+
+        blockquote {
+            position: relative;
+            color: #999;
+            font-weight: 400;
+            border-left: 1px solid #1abc9c;
+            padding-left: 1em;
+            margin: 1em 3em 1em 2em
+        }
+
+        @media only screen and (max-width: 640px) {
+            blockquote {
+                margin: 1em 0
+            }
+        }
+
+        abbr,
+        acronym {
+            border-bottom: 1px dotted;
+            font-variant: normal
+        }
+
+        abbr {
+            cursor: help
+        }
+
+        del {
+            text-decoration: line-through
+        }
+
+        address,
+        caption,
+        cite,
+        code,
+        dfn,
+        em,
+        th,
+        var {
+            font-style: normal;
+            font-weight: 400
+        }
+
+        ol,
+        ul {
+            list-style: none
+        }
+
+        caption,
+        th {
+            text-align: left
+        }
+
+        q:after,
+        q:before {
+            content: ""
+        }
+
+        sub,
+        sup {
+            font-size: 75%;
+            line-height: 0;
+            position: relative
+        }
+
+        :root sub,
+        :root sup {
+            vertical-align: baseline
+        }
+
+        sup {
+            top: -.5em
+        }
+
+        sub {
+            bottom: -.25em
+        }
+
+        a {
+            color: #1abc9c
+        }
+
+        a:hover {
+            text-decoration: underline
+        }
+
+        .typo a {
+            border-bottom: 1px solid #1abc9c
+        }
+
+        .typo a:hover {
+            border-bottom-color: #555;
+            color: #555
+        }
+
+        .typo a:hover,
+        a,
+        ins {
+            text-decoration: none
+        }
+
+        .typo-u,
+        u {
+            text-decoration: underline
+        }
+
+        mark {
+            background: #fffdd1;
+            border-bottom: 1px solid #ffedce;
+            padding: 2px;
+            margin: 0 5px
+        }
+
+        code,
+        pre,
+        pre tt {
+            font-family: Courier, Courier New, monospace
+        }
+
+        pre {
+            background: hsla(0, 0%, 97%, .7);
+            border: 1px solid #ddd;
+            padding: 1em 1.5em;
+            display: block;
+            -webkit-overflow-scrolling: touch
+        }
+
+        hr {
+            border: none;
+            border-bottom: 1px solid #cfcfcf;
+            margin-bottom: .8em;
+            height: 10px
+        }
+
+        .typo-small,
+        figcaption,
+        small {
+            font-size: .9em;
+            color: #888
+        }
+
+        b,
+        strong {
+            font-weight: 700;
+            color: #000
+        }
+
+        [draggable] {
+            cursor: move
+        }
+
+        .clearfix:after,
+        .clearfix:before {
+            content: "";
+            display: table
+        }
+
+        .clearfix:after {
+            clear: both
+        }
+
+        .clearfix {
+            zoom: 1
+        }
+
+        .textwrap,
+        .textwrap td,
+        .textwrap th {
+            word-wrap: break-word;
+            word-break: break-all
+        }
+
+        .textwrap-table {
+            table-layout: fixed
+        }
+
+        .serif {
+            font-family: Palatino, Optima, Georgia, serif
+        }
+
+        .typo-dl,
+        .typo-form,
+        .typo-hr,
+        .typo-ol,
+        .typo-p,
+        .typo-pre,
+        .typo-table,
+        .typo-ul,
+        .typo dl,
+        .typo form,
+        .typo hr,
+        .typo ol,
+        .typo p,
+        .typo pre,
+        .typo table,
+        .typo ul,
+        blockquote {
+            margin-bottom: 1rem
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: PingFang SC, Helvetica Neue, Verdana, Microsoft Yahei, Hiragino Sans GB, Microsoft Sans Serif, WenQuanYi Micro Hei, sans-serif;
+            color: #000;
+            line-height: 1.35
+        }
+
+        .typo-h1,
+        .typo-h2,
+        .typo-h3,
+        .typo-h4,
+        .typo-h5,
+        .typo-h6,
+        .typo h1,
+        .typo h2,
+        .typo h3,
+        .typo h4,
+        .typo h5,
+        .typo h6 {
+            margin-top: 1.2em;
+            margin-bottom: .6em;
+            line-height: 1.35
+        }
+
+        .typo-h1,
+        .typo h1 {
+            font-size: 2em
+        }
+
+        .typo-h2,
+        .typo h2 {
+            font-size: 1.8em
+        }
+
+        .typo-h3,
+        .typo h3 {
+            font-size: 1.6em
+        }
+
+        .typo-h4,
+        .typo h4 {
+            font-size: 1.4em
+        }
+
+        .typo-h5,
+        .typo-h6,
+        .typo h5,
+        .typo h6 {
+            font-size: 1.2em
+        }
+
+        .typo-ul,
+        .typo ul {
+            margin-left: 1.3em;
+            list-style: disc
+        }
+
+        .typo-ol,
+        .typo ol {
+            list-style: decimal;
+            margin-left: 1.9em
+        }
+
+        .typo-ol ol,
+        .typo-ol ul,
+        .typo-ul ol,
+        .typo-ul ul,
+        .typo li ol,
+        .typo li ul {
+            margin-bottom: .8em;
+            margin-left: 2em
+        }
+
+        .typo-ol ul,
+        .typo-ul ul,
+        .typo li ul {
+            list-style: circle
+        }
+
+        .typo-table td,
+        .typo-table th,
+        .typo table caption,
+        .typo table td,
+        .typo table th {
+            border: 1px solid #ddd;
+            padding: .5em 1em;
+            color: #666
+        }
+
+        .typo-table th,
+        .typo table th {
+            background: #fbfbfb
+        }
+
+        .typo-table thead th,
+        .typo table thead th {
+            background: hsla(0, 0%, 95%, .7)
+        }
+
+        .typo table caption {
+            border-bottom: none
+        }
+
+        .typo-input,
+        .typo-textarea {
+            -webkit-appearance: none;
+            border-radius: 0
+        }
+
+        .typo-em,
+        .typo em,
+        caption,
+        legend {
+            color: #000;
+            font-weight: inherit
+        }
+
+        .typo-em {
+            position: relative
+        }
+
+        .typo-em:after {
+            position: absolute;
+            top: .65em;
+            left: 0;
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            content: "\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB"
+        }
+
+        .typo img {
+            max-width: 100%
+        }
+
+        .common-content {
+            font-weight: 400;
+            color: #353535;
+            line-height: 1.75rem;
+            white-space: normal;
+            word-break: normal;
+            font-size: 1rem
+        }
+
+        .common-content img {
+            display: block;
+            max-width: 100%;
+            background-color: #eee
+        }
+
+        .common-content audio,
+        .common-content video {
+            width: 100%;
+            background-color: #eee
+        }
+
+        .common-content center,
+        .common-content font {
+            margin-top: 1rem;
+            display: inline-block
+        }
+
+        .common-content center {
+            width: 100%
+        }
+
+        .common-content pre {
+            margin-top: 1rem;
+            padding-left: 0;
+            padding-right: 0;
+            position: relative;
+            overflow: hidden
+        }
+
+        .common-content pre code {
+            font-size: .8rem;
+            font-family: Consolas, Liberation Mono, Menlo, monospace, Courier;
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            overflow-x: auto
+        }
+
+        .common-content hr {
+            border: none;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-top: 1px solid #f5f5f5;
+            height: 1px;
+            background: none
+        }
+
+        .common-content b,
+        .common-content h1,
+        .common-content h2,
+        .common-content h3,
+        .common-content h4,
+        .common-content h5,
+        .common-content strong {
+            font-weight: 700
+        }
+
+        .common-content h1,
+        .common-content h2 {
+            font-size: 1.125rem;
+            margin-bottom: .45rem
+        }
+
+        .common-content h3,
+        .common-content h4,
+        .common-content h5 {
+            font-size: 1rem;
+            margin-bottom: .45rem
+        }
+
+        .common-content p {
+            font-weight: 400;
+            color: #353535;
+            margin-top: .15rem
+        }
+
+        .common-content .orange {
+            color: #ff5a05
+        }
+
+        .common-content .reference {
+            font-size: 1rem;
+            color: #888
+        }
+
+        .custom-rich-content h1 {
+            margin-top: 0;
+            font-weight: 400;
+            font-size: 15.25px;
+            border-bottom: 1px solid #eee;
+            line-height: 2.8
+        }
+
+        .custom-rich-content li,
+        .custom-rich-content p {
+            font-size: 14px;
+            color: #888;
+            line-height: 1.6
+        }
+
+        table.hljs-ln {
+            margin-bottom: 0;
+            border-spacing: 0;
+            border-collapse: collapse
+        }
+
+        table.hljs-ln,
+        table.hljs-ln tbody,
+        table.hljs-ln td,
+        table.hljs-ln tr {
+            box-sizing: border-box
+        }
+
+        table.hljs-ln td {
+            padding: 0;
+            border: 0
+        }
+
+        table.hljs-ln td.hljs-ln-numbers {
+            min-width: 15px;
+            color: rgba(27, 31, 35, .3);
+            text-align: right;
+            white-space: nowrap;
+            cursor: pointer;
+            user-select: none
+        }
+
+        table.hljs-ln td.hljs-ln-code,
+        table.hljs-ln td.hljs-ln-numbers {
+            font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+            font-size: 12px;
+            line-height: 20px;
+            vertical-align: top
+        }
+
+        table.hljs-ln td.hljs-ln-code {
+            position: relative;
+            padding-right: 10px;
+            padding-left: 10px;
+            overflow: visible;
+            color: #24292e;
+            word-wrap: normal;
+            white-space: pre
+        }
+
+        video::-webkit-media-controls {
+            overflow: hidden !important
+        }
+
+        video::-webkit-media-controls-enclosure {
+            width: calc(100% + 32px);
+            margin-left: auto
+        }
+
+        ._29HP61GA_0 {
+            max-width:800px;
+            margin:0 auto;
+            margin-bottom: 20px;
+            font-weight: 400;
+            color: #353535;
+            line-height: 1.76;
+            white-space: normal;
+            word-break: normal;
+            font-size: 17px;
+            -webkit-transition: background-color .3s ease;
+            transition: background-color .3s ease
+        }
+
+        ._29HP61GA_0 .MathJax_Display {
+            overflow: auto
+        }
+
+        ._29HP61GA_0 .poster {
+            position: fixed;
+            left: -10000px;
+            top: -10000px;
+            overflow: hidden;
+            padding: 1rem;
+            background: #ececec
+        }
+
+        ._29HP61GA_0 .richcontent-pre-copy {
+            font-size: 13px;
+            color: #888;
+            position: absolute;
+            right: 1em;
+            top: .5em;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none
+        }
+
+        ._29HP61GA_0 .richcontent-pre-copy .iconfont {
+            font-size: 12px;
+            margin-right: .2em
+        }
+
+        ._29HP61GA_0 a {
+            color: #fa8919;
+            border-bottom: 1px solid #fa8919
+        }
+
+        ._29HP61GA_0 img {
+            display: block;
+            max-width: 100%;
+            position: relative;
+            left: 50%;
+            -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
+            background-color: #eee;
+            vertical-align: top;
+            border-radius: 0
+        }
+
+        ._29HP61GA_0 audio,
+        ._29HP61GA_0 video {
+            width: 100%;
+            background-color: #eee
+        }
+
+        ._29HP61GA_0 pre {
+            margin-top: 16px;
+            padding: 34px 0 0;
+            margin-bottom: 30px;
+            position: relative;
+            border-radius: 6px;
+            background: rgba(246, 247, 251, .749);
+            border: 0
+        }
+
+        ._29HP61GA_0 pre code {
+            font-size: 12px;
+            font-family: Consolas, Liberation Mono, Menlo, monospace, Courier;
+            display: block;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            margin-left: 16px;
+            margin-right: 16px;
+            overflow-x: scroll
+        }
+
+        ._29HP61GA_0 pre code:after {
+            content: "";
+            height: 30px;
+            width: 100%;
+            display: block
+        }
+
+        ._29HP61GA_0 hr {
+            border: none;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-top: 1px solid #f5f5f5;
+            height: 1px;
+            background: none
+        }
+
+        ._29HP61GA_0 h1,
+        ._29HP61GA_0 h2,
+        ._29HP61GA_0 h3,
+        ._29HP61GA_0 h4,
+        ._29HP61GA_0 h5 {
+            margin-bottom: 20px;
+            margin-top: 0;
+            font-weight: 700
+        }
+
+        ._29HP61GA_0 b,
+        ._29HP61GA_0 strong {
+            font-weight: 700
+        }
+
+        ._29HP61GA_0 h1 {
+            font-size: 21px
+        }
+
+        ._29HP61GA_0 h2 {
+            font-size: 20px
+        }
+
+        ._29HP61GA_0 h3 {
+            font-size: 19px
+        }
+
+        ._29HP61GA_0 h4 {
+            font-size: 18px
+        }
+
+        ._29HP61GA_0 h5 {
+            font-size: 17px
+        }
+
+        ._29HP61GA_0 center,
+        ._29HP61GA_0 p {
+            font-weight: 400;
+            color: #353535;
+            margin-top: 0;
+            margin-bottom: 30px;
+            word-break: break-word
+        }
+
+        ._29HP61GA_0 center {
+            text-align: center
+        }
+
+        ._29HP61GA_0 blockquote {
+            margin-top: 0;
+            margin-bottom: 34px;
+            border-left: 3px solid #e8e8e8;
+            padding-left: 17px;
+            color: #353535
+        }
+
+        ._29HP61GA_0 blockquote p {
+            margin-top: 0;
+            margin-bottom: 0
+        }
+
+        ._29HP61GA_0 ol,
+        ._29HP61GA_0 ul {
+            margin-bottom: 30px
+        }
+
+        ._29HP61GA_0 ol p,
+        ._29HP61GA_0 ul p {
+            margin-top: 0;
+            margin-bottom: 0
+        }
+
+        ._29HP61GA_0 ol {
+            list-style: decimal;
+            margin-left: 20px
+        }
+
+        ._29HP61GA_0 ul li {
+            padding-left: 17px;
+            position: relative;
+            margin-bottom: 10px
+        }
+
+        ._29HP61GA_0 ul li:after {
+            content: "";
+            height: 6px;
+            width: 6px;
+            border-radius: 50%;
+            background: #353535;
+            position: absolute;
+            top: 10px;
+            left: 0
+        }
+
+        ._29HP61GA_0 .orange {
+            color: #fa8919
+        }
+
+        ._29HP61GA_0 .reference {
+            color: #888
+        }
+
+        ._29HP61GA_0 .m-right {
+            text-align: right
+        }
+
+        ._29HP61GA_0 .m-center {
+            text-align: center;
+            display: block
+        }
+
+        ._29HP61GA_0 .m-gray {
+            color: #888
+        }
+
+        ._29HP61GA_0 .m-small {
+            font-size: 15px
+        }
+
+        ._29HP61GA_0 table.hljs-ln {
+            margin-bottom: 0;
+            border-spacing: 0;
+            border-collapse: collapse
+        }
+
+        ._29HP61GA_0 table.hljs-ln,
+        ._29HP61GA_0 table.hljs-ln tbody,
+        ._29HP61GA_0 table.hljs-ln td,
+        ._29HP61GA_0 table.hljs-ln tr {
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box
+        }
+
+        ._29HP61GA_0 table.hljs-ln td {
+            padding: 0;
+            border: 0
+        }
+
+        ._29HP61GA_0 table.hljs-ln td.hljs-ln-numbers {
+            min-width: 15px;
+            font-size: 12px;
+            color: rgba(27, 31, 35, .3);
+            text-align: right;
+            white-space: nowrap;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none
+        }
+
+        ._29HP61GA_0 table.hljs-ln td.hljs-ln-code,
+        ._29HP61GA_0 table.hljs-ln td.hljs-ln-numbers {
+            font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+            line-height: 20px;
+            vertical-align: top
+        }
+
+        ._29HP61GA_0 table.hljs-ln td.hljs-ln-code {
+            position: relative;
+            padding-right: 10px;
+            padding-left: 10px;
+            overflow: visible;
+            font-size: 13px;
+            color: #666;
+            word-wrap: normal;
+            white-space: pre
+        }
+
+    </style>
+</head>
+<body>
+<div class="_29HP61GA_0">
+<h1>23-索引的概览：用还是不用索引，这是一个问题</h1>
+<p>提起优化SQL，你可能会把它理解为优化索引。简单来说这也不算错，索引在SQL优化中占了很大的比重。索引用得好，可以将SQL查询的效率提升10倍甚至更多。但索引是万能的吗？既然索引可以提升效率，只要创建索引不就好了吗？实际上，在有些情况下，创建索引反而会降低效率。</p><p>今天我们就来讲一下索引，索引涉及到的内容比较多，今天先来对索引有个整体的认知。</p><ol>
+<li>什么情况下创建索引，什么时候不需要索引？</li>
+<li>索引的种类有哪些？</li>
+</ol><p>索引的原理很好理解，在今天的内容里，我依然会通过SQL查询实验验证今天的内容，帮你进一步加深理解。</p><h2>索引是万能的吗？</h2><p>首先我们需要了解什么是索引（Index）。数据库中的索引，就好比一本书的目录，它可以帮我们快速进行特定值的定位与查找，从而加快数据查询的效率。</p><p>索引就是帮助数据库管理系统高效获取数据的数据结构。</p><p>如果我们不使用索引，就必须从第1条记录开始扫描，直到把所有的数据表都扫描完，才能找到想要的数据。既然如此，如果我们想要快速查找数据，就只需要创建更多的索引就好了呢？</p><p>其实<strong>索引不是万能的，在有些情况下使用索引反而会让效率变低</strong>。</p><p>索引的价值是帮我们从海量数据中找到想要的数据，如果数据量少，那么是否使用索引对结果的影响并不大。</p><!-- [[[read_end]]] --><p>在数据表中的数据行数比较少的情况下，比如不到1000行，是不需要创建索引的。另外，当数据重复度大，比如高于10%的时候，也不需要对这个字段使用索引。我之前讲到过，如果是性别这个字段，就不需要对它创建索引。这是为什么呢？如果你想要在100万行数据中查找其中的50万行（比如性别为男的数据），一旦创建了索引，你需要先访问50万次索引，然后再访问50万次数据表，这样加起来的开销比不使用索引可能还要大。</p><p>当然，空口无凭，我们来做两个实验，更直观地了解索引。</p><h3>实验1：数据行数少的情况下，索引效率如何</h3><p>我在<a href="https://pan.baidu.com/s/1X47UAx6EWasYLLU91RYHKQ">百度网盘</a>上提供了数据表，heros_without_index.sql 和 heros_with_index.sql，提取码为wxho。</p><p>在第一个数据表中，除了自增的id以外没有建立额外的索引。第二张数据表中，我对name字段建立了唯一索引。</p><p>heros数据表一共有69个英雄，数据量很少。当我们对name进行条件查询的时候，我们观察一下创建索引前后的效率。</p><pre><code>SELECT id, name, hp_max, mp_max FROM heros_without_index WHERE name = '刘禅'
+</code></pre><p>运行结果（1条数据，运行时间0.072s）：</p><p><img src="https://static001.geekbang.org/resource/image/c5/e4/c5e0f02544f241d45ccac40e70a56be4.png" alt=""><br>
+我对name字段建立索引后，再进行查询：</p><pre><code>SELECT id, name, hp_max, mp_max FROM heros_with_index WHERE name = '刘禅'
+</code></pre><p>运行结果（1条数据，运行时间0.080s）：</p><p><img src="https://static001.geekbang.org/resource/image/78/e8/782190bdc5120b40727fc8d28d9a35e8.png" alt=""><br>
+你能看到运行结果相同，但是创建了name字段索引的效率比没有创建索引时效率更低。在数据量不大的情况下，索引就发挥不出作用了。</p><h3>实验2：性别（男或女）字段真的不应该创建索引吗？</h3><p>如果一个字段的取值少，比如性别这个字段，通常是不需要创建索引的。那么有没有特殊的情况呢？</p><p>下面我们来看一个例子，假设有一个女儿国，人口总数为100万人，男性只有10个人，也就是占总人口的10万分之1。</p><p>女儿国的人口数据表user_gender见百度网盘中的user_gender.sql。其中数据表中的user_gender字段取值为0或1，0代表女性，1代表男性。</p><p>如果我们要筛选出这个国家中的男性，可以使用：</p><pre><code>SELECT * FROM user_gender WHERE user_gender = 1
+</code></pre><p>运行结果（10条数据，运行时间0.696s）：</p><p><img src="https://static001.geekbang.org/resource/image/34/b4/34355803b19fb7f460cf0aad1d8bf2b4.png" alt=""><br>
+你能看到在未创建索引的情况下，运行的效率并不高。如果我们针对user_gender字段创建索引呢？</p><pre><code>SELECT * FROM user_gender WHERE user_gender = 1
+</code></pre><p>同样是10条数据，运行结果相同，时间却缩短到了0.052s，大幅提升了查询的效率。</p><p>其实通过这两个实验你也能看出来，索引的价值是帮你快速定位。如果想要定位的数据有很多，那么索引就失去了它的使用价值，比如通常情况下的性别字段。不过有时候，我们还要考虑这个字段中的数值分布的情况，在实验2中，性别字段的数值分布非常特殊，男性的比例非常少。</p><p>我们不仅要看字段中的数值个数，还要根据数值的分布情况来考虑是否需要创建索引。</p><h2>索引的种类有哪些？</h2><p>虽然使用索引的本质目的是帮我们快速定位想要查找的数据，但实际上，索引有很多种类。</p><p>从功能逻辑上说，索引主要有4种，分别是普通索引、唯一索引、主键索引和全文索引。</p><p>普通索引是基础的索引，没有任何约束，主要用于提高查询效率。唯一索引就是在普通索引的基础上增加了数据唯一性的约束，在一张数据表里可以有多个唯一索引。主键索引在唯一索引的基础上增加了不为空的约束，也就是NOT NULL+UNIQUE，一张表里最多只有一个主键索引。全文索引用的不多，MySQL自带的全文索引只支持英文。我们通常可以采用专门的全文搜索引擎，比如ES(ElasticSearch)和Solr。</p><p>其实前三种索引（普通索引、唯一索引和主键索引）都是一类索引，只不过对数据的约束性逐渐提升。在一张数据表中只能有一个主键索引，这是由主键索引的物理实现方式决定的，因为数据存储在文件中只能按照一种顺序进行存储。但可以有多个普通索引或者多个唯一索引。</p><p>按照物理实现方式，索引可以分为2种：聚集索引和非聚集索引。我们也把非聚集索引称为二级索引或者辅助索引。</p><p>聚集索引可以按照主键来排序存储数据，这样在查找行的时候非常有效。举个例子，如果是一本汉语字典，我们想要查找“数”这个字，直接在书中找汉语拼音的位置即可，也就是拼音“shu”。这样找到了索引的位置，在它后面就是我们想要找的数据行。</p><p>非聚集索引又是什么呢？</p><p>在数据库系统会有单独的存储空间存放非聚集索引，这些索引项是按照顺序存储的，但索引项指向的内容是随机存储的。也就是说系统会进行两次查找，第一次先找到索引，第二次找到索引对应的位置取出数据行。非聚集索引不会把索引指向的内容像聚集索引一样直接放到索引的后面，而是维护单独的索引表（只维护索引，不维护索引指向的数据），为数据检索提供方便。我们还以汉语字典为例，如果想要查找“数”字，那么按照部首查找的方式，先找到“数”字的偏旁部首，然后这个目录会告诉我们“数”字存放到第多少页，我们再去指定的页码找这个字。</p><p>聚集索引指表中数据行按索引的排序方式进行存储，对查找行很有效。只有当表包含聚集索引时，表内的数据行才会按找索引列的值在磁盘上进行物理排序和存储。每一个表只能有一个聚集索引，因为数据行本身只能按一个顺序存储。</p><p>聚集索引与非聚集索引的原理不同，在使用上也有一些区别：</p><ol>
+<li>聚集索引的叶子节点存储的就是我们的数据记录，非聚集索引的叶子节点存储的是数据位置。非聚集索引不会影响数据表的物理存储顺序。</li>
+<li>一个表只能有一个聚集索引，因为只能有一种排序存储的方式，但可以有多个非聚集索引，也就是多个索引目录提供数据检索。</li>
+<li>使用聚集索引的时候，数据的查询效率高，但如果对数据进行插入，删除，更新等操作，效率会比非聚集索引低。</li>
+</ol><h3>实验3：使用聚集索引和非聚集索引的查询效率</h3><p>还是针对刚才的user_gender数据表，我们来看下使用聚集索引和非聚集索引的查询效率有什么区别。在user_gender表中，我设置了user_id为主键，也就是聚集索引的字段是user_id。这里我们查询下user_id=90001的用户信息：</p><pre><code>SELECT user_id, user_name, user_gender FROM user_gender WHERE user_id = 900001
+</code></pre><p>运行结果（1条数据，运行时间0.043s）：</p><p><img src="https://static001.geekbang.org/resource/image/6a/d1/6a9d1c1ab9315f2c77b81799f08b6ed1.png" alt=""><br>
+我们再直接对user_name字段进行条件查询，此时user_name字段没有创建索引：</p><pre><code>SELECT user_id, user_name, user_gender FROM user_gender WHERE user_name = 'student_890001'
+</code></pre><p>运行结果（1条数据，运行时间0.961s）：</p><p><img src="https://static001.geekbang.org/resource/image/81/a0/817979acbd125773405604b8e86d06a0.png" alt=""><br>
+你能看出对没有建立索引的字段进行条件查询，查询效率明显降低了。</p><p>然后我们对user_name字段创建普通索引，进行SQL查询：</p><pre><code>SELECT user_id, user_name, user_gender FROM user_gender WHERE user_name = 'student_890001'
+</code></pre><p>运行结果（1条数据，运行时间0.050s）：</p><p><img src="https://static001.geekbang.org/resource/image/9f/0f/9f6be9d6ebeff6e574687923085a670f.png" alt=""><br>
+通过对这3次SQL查询结果的对比，我们可以总结出以下两点内容：</p><ol>
+<li>对WHERE子句的字段建立索引，可以大幅提升查询效率。</li>
+<li>采用聚集索引进行数据查询，比使用非聚集索引的查询效率略高。如果查询次数比较多，还是尽量使用主键索引进行数据查询。</li>
+</ol><p>除了业务逻辑和物理实现方式，索引还可以按照字段个数进行划分，分成单一索引和联合索引。</p><p>索引列为一列时为单一索引；多个列组合在一起创建的索引叫做联合索引。</p><p>创建联合索引时，我们需要注意创建时的顺序问题，因为联合索引(x, y, z)和(z, y, x)在使用的时候效率可能会存在差别。</p><p>这里需要说明的是联合索引存在<strong>最左匹配原则</strong>，也就是按照最左优先的方式进行索引的匹配。比如刚才举例的(x, y, z)，如果查询条件是WHERE x=1 AND y=2 AND z=3，就可以匹配上联合索引；如果查询条件是 WHERE y=2，就无法匹配上联合索引。</p><h3>实验4：联合索引的最左原则</h3><p>还是针对user_gender数据表，我们把user_id和user_name字段设置为联合主键，然后看下SQL查询效率有什么区别。</p><pre><code>SELECT user_id, user_name, user_gender FROM user_gender WHERE user_id = 900001 AND user_name = 'student_890001'
+</code></pre><p>运行结果（1条数据，运行时间0.046s）：</p><p><img src="https://static001.geekbang.org/resource/image/70/7d/704d1018a33b819828c879eb983f2f7d.png" alt=""></p><pre><code>SELECT user_id, user_name, user_gender FROM user_gender WHERE user_id = 900001
+</code></pre><p>运行结果（1条数据，运行时间0.046s）：</p><p><img src="https://static001.geekbang.org/resource/image/cc/e6/cc709a46717a58e22d25a2556b8fdee6.png" alt=""><br>
+我们再来看下普通的条件查询是什么样子的：</p><pre><code>SELECT user_id, user_name, user_gender FROM user_gender WHERE user_name = 'student_890001'
+</code></pre><p>运行结果（1条数据，运行时间0.943s）：</p><p><img src="https://static001.geekbang.org/resource/image/cc/e6/cc709a46717a58e22d25a2556b8fdee6.png" alt=""><br>
+你能看到当我们使用了联合索引(user_id, user_name)的时候，在WHERE子句中对联合索引中的字段user_id和user_name进行条件查询，或者只对user_id进行查询，效率基本上是一样的。当我们对user_name进行条件查询时，效率就会降低很多，这是因为根据联合索引的最左原则，user_id在user_name的左侧，如果没有使用user_id，而是直接使用user_name进行条件查询，联合索引就会失效。</p><h2>总结</h2><p>使用索引可以帮助我们从海量的数据中快速定位想要查找的数据，不过索引也存在一些不足，比如占用存储空间、降低数据库写操作的性能等，如果有多个索引还会增加索引选择的时间。当我们使用索引时，需要平衡索引的利（提升查询效率）和弊（维护索引所需的代价）。</p><p>在实际工作中，我们还需要基于需求和数据本身的分布情况来确定是否使用索引，尽管索引不是万能的，但数据量大的时候不使用索引是不可想象的，毕竟索引的本质，是帮助我们提升数据检索的效率。</p><p><img src="https://static001.geekbang.org/resource/image/4c/9e/4c8e1a4581840c23606a62488c3c919e.png" alt=""><br>
+今天的内容到这里就结束了，给你留个问题。关于联合索引的最左原则指的是什么？在使用联合索引时，有哪些需要注意的地方呢？</p><p>欢迎你在评论区写下你的答案，也欢迎把这篇文章分享给你的朋友或者同事，一起交流一下。</p><p><img src="https://static001.geekbang.org/resource/image/4f/58/4fd70a3267ad5aeb8c531f0996642f58.jpg" alt=""></p><h2>精选留言：</h2>
+        <ul>
+        
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            许童童  2019-08-02 11:32:49
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            使用联合索引时，如果可以使用索引覆盖，那就不用回表，查询性能更好了。 [1赞]
+        </div>
+        
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            阿锋  2019-08-02 10:12:55
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            普通索引、唯一索引、主键索引和全文索引，它们对应聚集索引还是非聚集索引？ [1赞]
+        </div>
+        
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            老毕  2019-08-03 00:19:33
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            联合索引的最左原则就是说，索引是一种顺序结构，我们按照什么顺序创建索引，就只能按照这个顺序使用索引，这容易理解。<br><br>假设我们有X、Y、Z三个字段，创建联合索引（X, Y, Z），可以理解成，数据库按照不同的权重排列了XYZ，形成了一个新值。<br><br>如果把X、Y、Z分别类别成“百分位”、“十分位”和“个位”，则新值XYZ依次排列在索引上。<br><br>查询“X=9 AND Y=8 AND Z=7”的过程，就是在一个由小到大排列的数值序列中寻找“987”，可以很快找到。<br><br>查询“Y=8 AND Z=7”，就用不上索引了，因为可能存在187、287、387、487...，这样就必须扫描所有数值。<br><br>查询“Z=7 AND Y=8 AND X=9”，看上去所有字段都用上了，也可以按照百分位、十分位和个数的逻辑去利用索引，但SQL不会自动识别出联合索引顺序与联合查询的顺序，它会严格地按照字面顺序去套用索引，只要不匹配，就不用。<br><br>综上，使用联合索引的时候，字段顺序不能乱，查询字段可以少，但只能从右侧开始减少，不能从左侧。<br><br>这就像按顺序查数值，先找高位再找低位（索引扫描），如果先找十分位或者先找个位，那就只能每个数值都看一下（全扫描）。 
+        </div>
+        
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            Geek_4a1041  2019-08-02 11:33:22
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            课后问题：联合索引的最左原则，只能从最左边开始匹配，比如联合索引为（&#39;字段1，字段2，字段3）;<br>只能从最左边开始匹配就是  WHERE 字段1 = &#39;value&#39;  或 WHERE  字段1= &#39;value’AND 字段2 =&#39;value&#39;,<br>而不能 WHERE 字段2 =&#39;value&#39;;<br>老师，这样理解，对吗， 
+        </div>
+        
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            Geek_6cfaa7  2019-08-02 10:53:02
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            老师好，聚集索引是不是本身不增加存储空间，只是规定表必须按主键顺序存储，这样如果按主键字段内容查找就会很快，非聚集索引就等于单独做了本目录，单独开辟了一个空间，想要查找先要到这个目录里去找，是这个意思吗？不知道理解的对不对，忘老师解答 
+        </div>
+        
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            nimil  2019-08-02 09:03:26
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            老师您好，请问下聚集索引叶子节点是直接存储的行数据还是行数据在磁盘的地址呢 
+        </div>
+        
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            捞鱼的搬砖奇  2019-08-02 08:54:26
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            sql能同时提供到github上吗 
+        </div>
+        
+    </div>
+</li>
+            </ul>
+</div>
+</body>
+</html>

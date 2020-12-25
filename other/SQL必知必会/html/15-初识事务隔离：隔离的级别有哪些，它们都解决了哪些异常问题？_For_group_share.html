@@ -1,0 +1,1177 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>15-初识事务隔离：隔离的级别有哪些，它们都解决了哪些异常问题？</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <style>
+        html {
+            color: #333;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+            text-rendering: optimizelegibility;
+            font-family: Helvetica Neue, PingFang SC, Verdana, Microsoft Yahei, Hiragino Sans GB, Microsoft Sans Serif, WenQuanYi Micro Hei, sans-serif
+        }
+
+        html.borderbox *,
+        html.borderbox :after,
+        html.borderbox :before {
+            box-sizing: border-box
+        }
+
+        article,
+        aside,
+        blockquote,
+        body,
+        button,
+        code,
+        dd,
+        details,
+        dl,
+        dt,
+        fieldset,
+        figcaption,
+        figure,
+        footer,
+        form,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        header,
+        hr,
+        input,
+        legend,
+        li,
+        menu,
+        nav,
+        ol,
+        p,
+        pre,
+        section,
+        td,
+        textarea,
+        th,
+        ul {
+            margin: 0;
+            padding: 0
+        }
+
+        article,
+        aside,
+        details,
+        figcaption,
+        figure,
+        footer,
+        header,
+        menu,
+        nav,
+        section {
+            display: block
+        }
+
+        audio,
+        canvas,
+        video {
+            display: inline-block
+        }
+
+        body,
+        button,
+        input,
+        select,
+        textarea {
+            font: 300 1em/1.8 PingFang SC, Lantinghei SC, Microsoft Yahei, Hiragino Sans GB, Microsoft Sans Serif, WenQuanYi Micro Hei, Helvetica, sans-serif
+        }
+
+        button::-moz-focus-inner,
+        input::-moz-focus-inner {
+            padding: 0;
+            border: 0
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0
+        }
+
+        fieldset,
+        img {
+            border: 0
+        }
+
+        blockquote {
+            position: relative;
+            color: #999;
+            font-weight: 400;
+            border-left: 1px solid #1abc9c;
+            padding-left: 1em;
+            margin: 1em 3em 1em 2em
+        }
+
+        @media only screen and (max-width: 640px) {
+            blockquote {
+                margin: 1em 0
+            }
+        }
+
+        abbr,
+        acronym {
+            border-bottom: 1px dotted;
+            font-variant: normal
+        }
+
+        abbr {
+            cursor: help
+        }
+
+        del {
+            text-decoration: line-through
+        }
+
+        address,
+        caption,
+        cite,
+        code,
+        dfn,
+        em,
+        th,
+        var {
+            font-style: normal;
+            font-weight: 400
+        }
+
+        ol,
+        ul {
+            list-style: none
+        }
+
+        caption,
+        th {
+            text-align: left
+        }
+
+        q:after,
+        q:before {
+            content: ""
+        }
+
+        sub,
+        sup {
+            font-size: 75%;
+            line-height: 0;
+            position: relative
+        }
+
+        :root sub,
+        :root sup {
+            vertical-align: baseline
+        }
+
+        sup {
+            top: -.5em
+        }
+
+        sub {
+            bottom: -.25em
+        }
+
+        a {
+            color: #1abc9c
+        }
+
+        a:hover {
+            text-decoration: underline
+        }
+
+        .typo a {
+            border-bottom: 1px solid #1abc9c
+        }
+
+        .typo a:hover {
+            border-bottom-color: #555;
+            color: #555
+        }
+
+        .typo a:hover,
+        a,
+        ins {
+            text-decoration: none
+        }
+
+        .typo-u,
+        u {
+            text-decoration: underline
+        }
+
+        mark {
+            background: #fffdd1;
+            border-bottom: 1px solid #ffedce;
+            padding: 2px;
+            margin: 0 5px
+        }
+
+        code,
+        pre,
+        pre tt {
+            font-family: Courier, Courier New, monospace
+        }
+
+        pre {
+            background: hsla(0, 0%, 97%, .7);
+            border: 1px solid #ddd;
+            padding: 1em 1.5em;
+            display: block;
+            -webkit-overflow-scrolling: touch
+        }
+
+        hr {
+            border: none;
+            border-bottom: 1px solid #cfcfcf;
+            margin-bottom: .8em;
+            height: 10px
+        }
+
+        .typo-small,
+        figcaption,
+        small {
+            font-size: .9em;
+            color: #888
+        }
+
+        b,
+        strong {
+            font-weight: 700;
+            color: #000
+        }
+
+        [draggable] {
+            cursor: move
+        }
+
+        .clearfix:after,
+        .clearfix:before {
+            content: "";
+            display: table
+        }
+
+        .clearfix:after {
+            clear: both
+        }
+
+        .clearfix {
+            zoom: 1
+        }
+
+        .textwrap,
+        .textwrap td,
+        .textwrap th {
+            word-wrap: break-word;
+            word-break: break-all
+        }
+
+        .textwrap-table {
+            table-layout: fixed
+        }
+
+        .serif {
+            font-family: Palatino, Optima, Georgia, serif
+        }
+
+        .typo-dl,
+        .typo-form,
+        .typo-hr,
+        .typo-ol,
+        .typo-p,
+        .typo-pre,
+        .typo-table,
+        .typo-ul,
+        .typo dl,
+        .typo form,
+        .typo hr,
+        .typo ol,
+        .typo p,
+        .typo pre,
+        .typo table,
+        .typo ul,
+        blockquote {
+            margin-bottom: 1rem
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: PingFang SC, Helvetica Neue, Verdana, Microsoft Yahei, Hiragino Sans GB, Microsoft Sans Serif, WenQuanYi Micro Hei, sans-serif;
+            color: #000;
+            line-height: 1.35
+        }
+
+        .typo-h1,
+        .typo-h2,
+        .typo-h3,
+        .typo-h4,
+        .typo-h5,
+        .typo-h6,
+        .typo h1,
+        .typo h2,
+        .typo h3,
+        .typo h4,
+        .typo h5,
+        .typo h6 {
+            margin-top: 1.2em;
+            margin-bottom: .6em;
+            line-height: 1.35
+        }
+
+        .typo-h1,
+        .typo h1 {
+            font-size: 2em
+        }
+
+        .typo-h2,
+        .typo h2 {
+            font-size: 1.8em
+        }
+
+        .typo-h3,
+        .typo h3 {
+            font-size: 1.6em
+        }
+
+        .typo-h4,
+        .typo h4 {
+            font-size: 1.4em
+        }
+
+        .typo-h5,
+        .typo-h6,
+        .typo h5,
+        .typo h6 {
+            font-size: 1.2em
+        }
+
+        .typo-ul,
+        .typo ul {
+            margin-left: 1.3em;
+            list-style: disc
+        }
+
+        .typo-ol,
+        .typo ol {
+            list-style: decimal;
+            margin-left: 1.9em
+        }
+
+        .typo-ol ol,
+        .typo-ol ul,
+        .typo-ul ol,
+        .typo-ul ul,
+        .typo li ol,
+        .typo li ul {
+            margin-bottom: .8em;
+            margin-left: 2em
+        }
+
+        .typo-ol ul,
+        .typo-ul ul,
+        .typo li ul {
+            list-style: circle
+        }
+
+        .typo-table td,
+        .typo-table th,
+        .typo table caption,
+        .typo table td,
+        .typo table th {
+            border: 1px solid #ddd;
+            padding: .5em 1em;
+            color: #666
+        }
+
+        .typo-table th,
+        .typo table th {
+            background: #fbfbfb
+        }
+
+        .typo-table thead th,
+        .typo table thead th {
+            background: hsla(0, 0%, 95%, .7)
+        }
+
+        .typo table caption {
+            border-bottom: none
+        }
+
+        .typo-input,
+        .typo-textarea {
+            -webkit-appearance: none;
+            border-radius: 0
+        }
+
+        .typo-em,
+        .typo em,
+        caption,
+        legend {
+            color: #000;
+            font-weight: inherit
+        }
+
+        .typo-em {
+            position: relative
+        }
+
+        .typo-em:after {
+            position: absolute;
+            top: .65em;
+            left: 0;
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            content: "\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB"
+        }
+
+        .typo img {
+            max-width: 100%
+        }
+
+        .common-content {
+            font-weight: 400;
+            color: #353535;
+            line-height: 1.75rem;
+            white-space: normal;
+            word-break: normal;
+            font-size: 1rem
+        }
+
+        .common-content img {
+            display: block;
+            max-width: 100%;
+            background-color: #eee
+        }
+
+        .common-content audio,
+        .common-content video {
+            width: 100%;
+            background-color: #eee
+        }
+
+        .common-content center,
+        .common-content font {
+            margin-top: 1rem;
+            display: inline-block
+        }
+
+        .common-content center {
+            width: 100%
+        }
+
+        .common-content pre {
+            margin-top: 1rem;
+            padding-left: 0;
+            padding-right: 0;
+            position: relative;
+            overflow: hidden
+        }
+
+        .common-content pre code {
+            font-size: .8rem;
+            font-family: Consolas, Liberation Mono, Menlo, monospace, Courier;
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            overflow-x: auto
+        }
+
+        .common-content hr {
+            border: none;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-top: 1px solid #f5f5f5;
+            height: 1px;
+            background: none
+        }
+
+        .common-content b,
+        .common-content h1,
+        .common-content h2,
+        .common-content h3,
+        .common-content h4,
+        .common-content h5,
+        .common-content strong {
+            font-weight: 700
+        }
+
+        .common-content h1,
+        .common-content h2 {
+            font-size: 1.125rem;
+            margin-bottom: .45rem
+        }
+
+        .common-content h3,
+        .common-content h4,
+        .common-content h5 {
+            font-size: 1rem;
+            margin-bottom: .45rem
+        }
+
+        .common-content p {
+            font-weight: 400;
+            color: #353535;
+            margin-top: .15rem
+        }
+
+        .common-content .orange {
+            color: #ff5a05
+        }
+
+        .common-content .reference {
+            font-size: 1rem;
+            color: #888
+        }
+
+        .custom-rich-content h1 {
+            margin-top: 0;
+            font-weight: 400;
+            font-size: 15.25px;
+            border-bottom: 1px solid #eee;
+            line-height: 2.8
+        }
+
+        .custom-rich-content li,
+        .custom-rich-content p {
+            font-size: 14px;
+            color: #888;
+            line-height: 1.6
+        }
+
+        table.hljs-ln {
+            margin-bottom: 0;
+            border-spacing: 0;
+            border-collapse: collapse
+        }
+
+        table.hljs-ln,
+        table.hljs-ln tbody,
+        table.hljs-ln td,
+        table.hljs-ln tr {
+            box-sizing: border-box
+        }
+
+        table.hljs-ln td {
+            padding: 0;
+            border: 0
+        }
+
+        table.hljs-ln td.hljs-ln-numbers {
+            min-width: 15px;
+            color: rgba(27, 31, 35, .3);
+            text-align: right;
+            white-space: nowrap;
+            cursor: pointer;
+            user-select: none
+        }
+
+        table.hljs-ln td.hljs-ln-code,
+        table.hljs-ln td.hljs-ln-numbers {
+            font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+            font-size: 12px;
+            line-height: 20px;
+            vertical-align: top
+        }
+
+        table.hljs-ln td.hljs-ln-code {
+            position: relative;
+            padding-right: 10px;
+            padding-left: 10px;
+            overflow: visible;
+            color: #24292e;
+            word-wrap: normal;
+            white-space: pre
+        }
+
+        video::-webkit-media-controls {
+            overflow: hidden !important
+        }
+
+        video::-webkit-media-controls-enclosure {
+            width: calc(100% + 32px);
+            margin-left: auto
+        }
+
+        ._29HP61GA_0 {
+            max-width:800px;
+            margin:0 auto;
+            margin-bottom: 20px;
+            font-weight: 400;
+            color: #353535;
+            line-height: 1.76;
+            white-space: normal;
+            word-break: normal;
+            font-size: 17px;
+            -webkit-transition: background-color .3s ease;
+            transition: background-color .3s ease
+        }
+
+        ._29HP61GA_0 .MathJax_Display {
+            overflow: auto
+        }
+
+        ._29HP61GA_0 .poster {
+            position: fixed;
+            left: -10000px;
+            top: -10000px;
+            overflow: hidden;
+            padding: 1rem;
+            background: #ececec
+        }
+
+        ._29HP61GA_0 .richcontent-pre-copy {
+            font-size: 13px;
+            color: #888;
+            position: absolute;
+            right: 1em;
+            top: .5em;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none
+        }
+
+        ._29HP61GA_0 .richcontent-pre-copy .iconfont {
+            font-size: 12px;
+            margin-right: .2em
+        }
+
+        ._29HP61GA_0 a {
+            color: #fa8919;
+            border-bottom: 1px solid #fa8919
+        }
+
+        ._29HP61GA_0 img {
+            display: block;
+            max-width: 100%;
+            position: relative;
+            left: 50%;
+            -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
+            background-color: #eee;
+            vertical-align: top;
+            border-radius: 0
+        }
+
+        ._29HP61GA_0 audio,
+        ._29HP61GA_0 video {
+            width: 100%;
+            background-color: #eee
+        }
+
+        ._29HP61GA_0 pre {
+            margin-top: 16px;
+            padding: 34px 0 0;
+            margin-bottom: 30px;
+            position: relative;
+            border-radius: 6px;
+            background: rgba(246, 247, 251, .749);
+            border: 0
+        }
+
+        ._29HP61GA_0 pre code {
+            font-size: 12px;
+            font-family: Consolas, Liberation Mono, Menlo, monospace, Courier;
+            display: block;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            margin-left: 16px;
+            margin-right: 16px;
+            overflow-x: scroll
+        }
+
+        ._29HP61GA_0 pre code:after {
+            content: "";
+            height: 30px;
+            width: 100%;
+            display: block
+        }
+
+        ._29HP61GA_0 hr {
+            border: none;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-top: 1px solid #f5f5f5;
+            height: 1px;
+            background: none
+        }
+
+        ._29HP61GA_0 h1,
+        ._29HP61GA_0 h2,
+        ._29HP61GA_0 h3,
+        ._29HP61GA_0 h4,
+        ._29HP61GA_0 h5 {
+            margin-bottom: 20px;
+            margin-top: 0;
+            font-weight: 700
+        }
+
+        ._29HP61GA_0 b,
+        ._29HP61GA_0 strong {
+            font-weight: 700
+        }
+
+        ._29HP61GA_0 h1 {
+            font-size: 21px
+        }
+
+        ._29HP61GA_0 h2 {
+            font-size: 20px
+        }
+
+        ._29HP61GA_0 h3 {
+            font-size: 19px
+        }
+
+        ._29HP61GA_0 h4 {
+            font-size: 18px
+        }
+
+        ._29HP61GA_0 h5 {
+            font-size: 17px
+        }
+
+        ._29HP61GA_0 center,
+        ._29HP61GA_0 p {
+            font-weight: 400;
+            color: #353535;
+            margin-top: 0;
+            margin-bottom: 30px;
+            word-break: break-word
+        }
+
+        ._29HP61GA_0 center {
+            text-align: center
+        }
+
+        ._29HP61GA_0 blockquote {
+            margin-top: 0;
+            margin-bottom: 34px;
+            border-left: 3px solid #e8e8e8;
+            padding-left: 17px;
+            color: #353535
+        }
+
+        ._29HP61GA_0 blockquote p {
+            margin-top: 0;
+            margin-bottom: 0
+        }
+
+        ._29HP61GA_0 ol,
+        ._29HP61GA_0 ul {
+            margin-bottom: 30px
+        }
+
+        ._29HP61GA_0 ol p,
+        ._29HP61GA_0 ul p {
+            margin-top: 0;
+            margin-bottom: 0
+        }
+
+        ._29HP61GA_0 ol {
+            list-style: decimal;
+            margin-left: 20px
+        }
+
+        ._29HP61GA_0 ul li {
+            padding-left: 17px;
+            position: relative;
+            margin-bottom: 10px
+        }
+
+        ._29HP61GA_0 ul li:after {
+            content: "";
+            height: 6px;
+            width: 6px;
+            border-radius: 50%;
+            background: #353535;
+            position: absolute;
+            top: 10px;
+            left: 0
+        }
+
+        ._29HP61GA_0 .orange {
+            color: #fa8919
+        }
+
+        ._29HP61GA_0 .reference {
+            color: #888
+        }
+
+        ._29HP61GA_0 .m-right {
+            text-align: right
+        }
+
+        ._29HP61GA_0 .m-center {
+            text-align: center;
+            display: block
+        }
+
+        ._29HP61GA_0 .m-gray {
+            color: #888
+        }
+
+        ._29HP61GA_0 .m-small {
+            font-size: 15px
+        }
+
+        ._29HP61GA_0 table.hljs-ln {
+            margin-bottom: 0;
+            border-spacing: 0;
+            border-collapse: collapse
+        }
+
+        ._29HP61GA_0 table.hljs-ln,
+        ._29HP61GA_0 table.hljs-ln tbody,
+        ._29HP61GA_0 table.hljs-ln td,
+        ._29HP61GA_0 table.hljs-ln tr {
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box
+        }
+
+        ._29HP61GA_0 table.hljs-ln td {
+            padding: 0;
+            border: 0
+        }
+
+        ._29HP61GA_0 table.hljs-ln td.hljs-ln-numbers {
+            min-width: 15px;
+            font-size: 12px;
+            color: rgba(27, 31, 35, .3);
+            text-align: right;
+            white-space: nowrap;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none
+        }
+
+        ._29HP61GA_0 table.hljs-ln td.hljs-ln-code,
+        ._29HP61GA_0 table.hljs-ln td.hljs-ln-numbers {
+            font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+            line-height: 20px;
+            vertical-align: top
+        }
+
+        ._29HP61GA_0 table.hljs-ln td.hljs-ln-code {
+            position: relative;
+            padding-right: 10px;
+            padding-left: 10px;
+            overflow: visible;
+            font-size: 13px;
+            color: #666;
+            word-wrap: normal;
+            white-space: pre
+        }
+
+    </style>
+</head>
+<body>
+<div class="_29HP61GA_0">
+<h1>15-初识事务隔离：隔离的级别有哪些，它们都解决了哪些异常问题？</h1>
+<p>上一篇文章中，我们讲到了事务的四大特性ACID，分别是原子性、一致性、隔离性和持久性，其中隔离性是事务的基本特性之一，它可以防止数据库在并发处理时出现数据不一致的情况。最严格的情况下，我们可以采用串行化的方式来执行每一个事务，这就意味着事务之间是相互独立的，不存在并发的情况。然而在实际生产环境下，考虑到随着用户量的增多，会存在大规模并发访问的情况，这就要求数据库有更高的吞吐能力，这个时候串行化的方式就无法满足数据库高并发访问的需求，我们还需要降低数据库的隔离标准，来换取事务之间的并发能力。</p><p>有时候我们需要牺牲一定的正确性来换取效率的提升，也就是说，我们需要通过设置不同的隔离等级，以便在正确性和效率之间进行平衡。同时，随着RDBMS种类和应用场景的增多，数据库的设计者需要统一对数据库隔离级别进行定义，说明这些隔离标准都解决了哪些问题。</p><p>我们今天主要讲解事务的异常以及隔离级别都有哪些，如果你已经对它们有所了解，可以跳过本次章节，当然你也可以通过今天的课程快速复习一遍：</p><ol>
+<li>事务并发处理可能存在的三种异常有哪些？什么是脏读、不可重复读和幻读？</li>
+<li>针对可能存在的异常情况，四种事务隔离的级别分别是什么？</li>
+<li>如何使用MySQL客户端来模拟脏读、不可重复读和幻读？</li>
+</ol><!-- [[[read_end]]] --><h2>事务并发处理可能存在的异常都有哪些？</h2><p>在了解数据库隔离级别之前，我们需要了解设定事务的隔离级别都要解决哪些可能存在的问题，也就是事务并发处理时会存在哪些异常情况。实际上，SQL-92标准中已经对3种异常情况进行了定义，这些异常情况级别分别为脏读（Dirty Read）、不可重复读（Nnrepeatable Read）和幻读（Phantom Read）。</p><p>脏读、不可重复读和幻读都代表了什么，我用一个例子来给你讲解下。比如说我们有个英雄表heros_temp，如下所示：</p><p><img src="https://static001.geekbang.org/resource/image/66/dd/66cbeb736b5e92dc271f86b7152d46dd.png" alt=""><br>
+这张英雄表，我们会记录很多英雄的姓名，假设我们不对事务进行隔离操作，那么数据库在进行事务的并发处理时会出现怎样的情况？</p><p>第一天，小张访问数据库，正在进行事务操作，往里面写入一个新的英雄“吕布”：</p><pre><code>SQL&gt; BEGIN;
+SQL&gt; INSERT INTO heros_temp values(4, '吕布');
+</code></pre><p>当小张还没有提交该事务的时候，小李又对数据表进行了访问，他想看下这张英雄表里都有哪些英雄：</p><pre><code>SQL&gt; SELECT * FROM heros_temp;
+</code></pre><p>这时，小李看到的结果如下：</p><p><img src="https://static001.geekbang.org/resource/image/1c/a8/1c4c7b7d7223739eb5346e3159bb34a8.png" alt=""><br>
+你有没有发现什么异常？这个时候小张还没有提交事务，但是小李却读到了小张还没有提交的数据，这种现象我们称之为“脏读”。</p><p>那么什么是不可重复读呢？</p><p>第二天，小张想查看id=1的英雄是谁，于是他进行了SQL查询：</p><pre><code>SQL&gt; SELECT name FROM heros_temp WHERE id = 1;
+</code></pre><p>运行结果：</p><p><img src="https://static001.geekbang.org/resource/image/e3/74/e31d7f286ac5d77a82fb6ece2d1d6174.png" alt=""><br>
+然而此时，小李开始了一个事务操作，他对id=1的英雄姓名进行了修改，把原来的“张飞”改成了“张翼德”：</p><pre><code>SQL&gt; BEGIN;
+SQL&gt; UPDATE heros_temp SET name = '张翼德' WHERE id = 1;
+</code></pre><p>然后小张再一次进行查询，同样也是查看id=1的英雄是谁：</p><pre><code>SQL&gt; SELECT name FROM heros_temp WHERE id = 1;
+</code></pre><p>运行结果：</p><p><img src="https://static001.geekbang.org/resource/image/e3/74/e3f6e70119376869f9a39d739c842674.png" alt=""><br>
+这个时候你会发现，两次查询的结果并不一样。小张会想这是怎么回事呢？他明明刚执行了一次查询，马上又进行了一次查询，结果两次的查询结果不同。实际上小张遇到的情况我们称之为“不可重复读”，也就是同一条记录，两次读取的结果不同。</p><p>什么是幻读？</p><p>第三天，小张想要看下数据表里都有哪些英雄，他开始执行下面这条语句：</p><pre><code>SQL&gt; SELECT * FROM heros_temp;
+</code></pre><p><img src="https://static001.geekbang.org/resource/image/21/41/213f1601abb1629689d6d8477bd16641.png" alt=""><br>
+这时当小张执行完之后，小李又开始了一个事务，往数据库里插入一个新的英雄“吕布”：</p><pre><code>SQL&gt; BEGIN;
+SQL&gt; INSERT INTO heros_temp values(4, '吕布');
+</code></pre><p>不巧的是，小张这时忘记了英雄都有哪些，又重新执行了一遍查询：</p><pre><code>SQL&gt; SELECT * FROM heros_temp;
+</code></pre><p><img src="https://static001.geekbang.org/resource/image/13/ab/134a542eae8b47b9c5da5b74aa96d3ab.png" alt=""><br>
+他发现这一次查询多了一个英雄，原来只有3个，现在变成了4个。这种异常情况我们称之为“幻读”。</p><p>我来总结下这三种异常情况的特点：</p><ol>
+<li>脏读：读到了其他事务还没有提交的数据。</li>
+<li>不可重复读：对某数据进行读取，发现两次读取的结果不同，也就是说没有读到相同的内容。这是因为有其他事务对这个数据同时进行了修改或删除。</li>
+<li>幻读：事务A根据条件查询得到了N条数据，但此时事务B更改或者增加了M条符合事务A查询条件的数据，这样当事务A再次进行查询的时候发现会有N+M条数据，产生了幻读。</li>
+</ol><h2>事务隔离的级别有哪些？</h2><p>脏读、不可重复读和幻读这三种异常情况，是在SQL-92标准中定义的，同时SQL-92标准还定义了4种隔离级别来解决这些异常情况。</p><p>解决异常数量从少到多的顺序（比如读未提交可能存在3种异常，可串行化则不会存在这些异常）决定了隔离级别的高低，这四种隔离级别从低到高分别是：读未提交（READ UNCOMMITTED ）、读已提交（READ COMMITTED）、可重复读（REPEATABLE READ）和可串行化（SERIALIZABLE）。这些隔离级别能解决的异常情况如下表所示：</p><p><img src="https://static001.geekbang.org/resource/image/b0/95/b07103c5f5486aec5e2daf1dacfd6f95.png" alt=""><br>
+你能看到可串行化能避免所有的异常情况，而读未提交则允许异常情况发生。</p><p>关于这四种级别，我来简单讲解下。</p><p>读未提交，也就是允许读到未提交的数据，这种情况下查询是不会使用锁的，可能会产生脏读、不可重复读、幻读等情况。</p><p>读已提交就是只能读到已经提交的内容，可以避免脏读的产生，属于RDBMS中常见的默认隔离级别（比如说Oracle和SQL Server），但如果想要避免不可重复读或者幻读，就需要我们在SQL查询的时候编写带加锁的SQL语句（我会在进阶篇里讲加锁）。</p><p>可重复读，保证一个事务在相同查询条件下两次查询得到的数据结果是一致的，可以避免不可重复读和脏读，但无法避免幻读。MySQL默认的隔离级别就是可重复读。</p><p>可串行化，将事务进行串行化，也就是在一个队列中按照顺序执行，可串行化是最高级别的隔离等级，可以解决事务读取中所有可能出现的异常情况，但是它牺牲了系统的并发性。</p><h2>使用MySQL客户端来模拟三种异常</h2><p>我在讲解这三种异常的时候举了一个英雄数据表查询的例子，你还可以自己写SQL来模拟一下这三种异常。</p><p>首先我们需要一个英雄数据表heros_temp，具体表结构和数据，你可以从<a href="https://github.com/cystanford/sql_heros_data">GitHub</a>上下载heros_temp.sql文件。</p><p>你也可以执行下面的SQL文件，来完成heros_temp数据表的创建。</p><pre><code>-- ----------------------------
+-- Table structure for heros_temp
+-- ----------------------------
+DROP TABLE IF EXISTS `heros_temp`;
+CREATE TABLE `heros_temp`  (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of heros_temp
+-- ----------------------------
+INSERT INTO `heros_temp` VALUES (1, '张飞');
+INSERT INTO `heros_temp` VALUES (2, '关羽');
+INSERT INTO `heros_temp` VALUES (3, '刘备');
+</code></pre><p>模拟的时候我们需要开两个MySQL客户端，分别是客户端1和客户端2。</p><p>在客户端1中，我们先来查看下当前会话的隔离级别，使用命令：</p><pre><code>mysql&gt; SHOW VARIABLES LIKE 'transaction_isolation';
+</code></pre><p>然后你能看到当前的隔离级别是REPEATABLE-READ，也就是可重复读。</p><p><img src="https://static001.geekbang.org/resource/image/fa/5f/faaf3196f842d3331e40364fa331925f.png" alt=""></p><p>现在我们把隔离级别降到最低，设置为READ UNCOMMITTED（读未提交）。</p><pre><code>mysql&gt; SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+</code></pre><p>然后再查看下当前会话（SESSION）下的隔离级别，结果如下：</p><p><img src="https://static001.geekbang.org/resource/image/25/33/25bc5c5e570315b9c711156cf87f4233.png" alt=""></p><p>因为MySQL默认是事务自动提交，这里我们还需要将autocommit参数设置为0，命令如下：</p><pre><code>mysql&gt; SET autocommit = 0;
+</code></pre><p>然后我们再来查看SESSION中的autocommit取值，结果如下：</p><p><img src="https://static001.geekbang.org/resource/image/8c/e3/8c584071af1c37cb2ea7835ea94489e3.png" alt=""><br>
+接着我们以同样的操作启动客户端2，也就是将隔离级别设置为READ UNCOMMITTED（读未提交），autocommit设置为0。</p><h3>模拟“脏读”</h3><p>我们在客户端2中开启一个事务，在heros_temp表中写入一个新的英雄“吕布”，注意这个时候不要提交。</p><p><img src="https://static001.geekbang.org/resource/image/23/bb/2329718eb5e446a2e2e1e42420818abb.png" alt=""><br>
+然后我们在客户端1中，查看当前的英雄表：</p><p><img src="https://static001.geekbang.org/resource/image/a7/34/a74922819952a7afc93311c8e3f85834.png" alt=""></p><p>你能发现客户端1中读取了客户端2未提交的新英雄“吕布”，实际上客户端2可能马上回滚，从而造成了“脏读”。</p><h3>模拟“不可重复读”</h3><p>我们用客户端1来查看id=1的英雄：</p><p><img src="https://static001.geekbang.org/resource/image/39/17/39d6f01fbf926a83e28950bee720c917.png" alt=""></p><p>然后用客户端2对id=1的英雄姓名进行修改：</p><p><img src="https://static001.geekbang.org/resource/image/43/a6/43e24b5a2c9d861d4fde7ddc3195cda6.png" alt=""></p><p>这时用客户端1再次进行查询：</p><p><img src="https://static001.geekbang.org/resource/image/38/dd/38a638e9dcca39bc1cfb68279acdcbdd.png" alt=""></p><p>你能发现对于客户端1来说，同一条查询语句出现了“不可重复读”。</p><h3>模拟“幻读”</h3><p>我们先用客户端1查询数据表中的所有英雄：</p><p><img src="https://static001.geekbang.org/resource/image/cd/32/cd47f77c15be231ea0b185c265d4cd32.png" alt=""></p><p>然后用客户端2，开始插入新的英雄“吕布”：</p><p><img src="https://static001.geekbang.org/resource/image/13/1d/13ffd32b3654ff569e0eef6dbb2de51d.png" alt=""><br>
+这时，我们再用客户端1重新进行查看：</p><p><img src="https://static001.geekbang.org/resource/image/c3/3e/c3de2074d616530cafc6942e4a592b3e.png" alt=""><br>
+你会发现数据表多出一条数据。</p><p>如果你是初学者，那么你可以采用heros_temp数据表简单模拟一下以上的过程，加深对脏读、不可重复读以及幻读的理解。对应的，你也会更了解不同的隔离级别解决的异常问题。</p><h2>总结</h2><p>我们今天只是简单讲解了4种隔离级别，以及对应的要解决的三种异常问题。我会在优化篇这一模块里继续讲解隔离级别以及锁的使用。</p><p>你能看到，标准的价值在于，即使是不同的RDBMS都需要达成对异常问题和隔离级别定义的共识。这就意味着一个隔离级别的实现满足了下面的两个条件：</p><ol>
+<li>正确性：只要能满足某一个隔离级别，一定能解决这个隔离级别对应的异常问题。</li>
+<li>与实现无关：实际上RDBMS种类很多，这就意味着有多少种RDBMS，就有多少种锁的实现方式，因此它们实现隔离级别的原理可能不同，然而一个好的标准不应该限制其实现的方式。</li>
+</ol><p>隔离级别越低，意味着系统吞吐量（并发程度）越大，但同时也意味着出现异常问题的可能性会更大。在实际使用过程中我们往往需要在性能和正确性上进行权衡和取舍，没有完美的解决方案，只有适合与否。</p><p><img src="https://static001.geekbang.org/resource/image/20/5d/20697e62019613bc49f7ed88872b3a5d.png" alt=""><br>
+今天的内容到这里就结束了，你能思考一下为什么隔离级别越高，就越影响系统的并发性能吗？以及不可重复读和幻读的区别是什么？</p><p>欢迎你在评论区写下你的思考，也欢迎把这篇文章分享给你的朋友或者同事。</p><p><img src="https://static001.geekbang.org/resource/image/4f/58/4fd70a3267ad5aeb8c531f0996642f58.jpg" alt=""></p><h2>精选留言：</h2>
+        <ul>
+        
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            石维康  2019-07-15 09:40:59
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            老师可以详细讲解下脏读和幻读的区别吗？看文中的例子几乎是一样的。 [5赞]
+        </div>
+        
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            大牛凯  2019-07-15 02:35:34
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            老师好，对幻读有些迷惑，从网上看到幻读并不是说两次读取获取的结果集不同，幻读侧重的方面是某一次的 select 操作得到的结果所表征的数据状态无法支撑后续的业务操作。更为具体一些：select 某记录是否存在，结果显示不存在，准备插入此记录，但执行 insert 时发现此记录已存在，无法插入，此时就发生了幻读。 [4赞]
+        </div>
+        <br/>
+<div>
+    <div style="color:#888;font-size:15.25px;font-weight:400;line-height:1.2">作者回复2019-07-15 12:01:07</div>
+    <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">你说的这种情况属于幻读。<br>当你INSERT的时候，也需要隐式的读取，比如插入数据时需要读取有没有主键冲突，然后再决定是否能执行插入。如果这时发现已经有这个记录了，就没法插入。<br><br>官方对幻读的定义是：The so-called phantom problem occurs within a transaction when the same query produces different sets of rows at different times. <br>For example, if a SELECT is executed twice, but returns a row the second time that was not returned the first time, the row is a “phantom” row. （详见：<br>https:&#47;&#47;dev.mysql.com&#47;doc&#47;refman&#47;8.0&#47;en&#47;innodb-next-key-locking.html ）<br><br>需要说明下，不可重复读 VS 幻读的区别：<br>不可重复读是同一条记录的内容被修改了，重点在于UPDATE或DELETE<br>幻读是查询某一个范围的数据行变多了或者少了，重点在于INSERT<br><br>所以，SELECT 显示不存在，但是INSERT的时候发现已存在，说明符合条件的数据行发生了变化，也就是幻读的情况，而不可重复读指的是同一条记录的内容被修改了。</div>
+</div>
+            
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            啦啦啦  2019-07-15 00:02:50
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            打卡打卡 [3赞]
+        </div>
+        
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            dbtiger  2019-07-15 10:34:19
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            【隔离级别越高，就越影响系统的并发性能】<br>1,首先隔离的实现机制是锁，隔离级别越高锁的代价越大（锁的粒度越小，表级锁到行级锁，共享锁到独占锁），终极为了一致性读写，只能是串行化操作读写（类似于操作系统的多进程原理，看着像是并行性执行，实则是单元分配CPU资源串行执行的过程）。<br>【不可重复读和幻读的区别】<br>2.我认为没啥区别，前者只是列值改变了，后者侧重是记录数变了。都是2次读的时候中间夹了一个已经执行了的事务，从而产生2次读的数据不一致的情况。<br><br>另外，请教一下陈老师，存储过程里面有很多dml操作，每个dml语句加begin...end好，还是不加好，还是一样?两种状态对锁的持有时间是不是相同的？<br><br> [2赞]
+        </div>
+        
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            flow  2019-07-15 10:21:28
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            关于事务隔离和异常问题的举例不够详细和严谨，具体可以看这个 https:&#47;&#47;www.liaoxuefeng.com&#47;wiki&#47;1177760294764384&#47;1179611198786848<br><br>以下是自己的理解：<br>读未提交：在这个隔离级别下，事务A会读到事务B未提交的数据，在事务B回滚后，事务A读到的数据无意义，是脏数据，称为 脏读<br>读已提交：在这个隔离级别下，只有在事务B已提交时，事务A才能读到，如果事务A先查询id为1的记录，之后事务B修改这条记录并提交，事务A再读取，两次结果会不一致，所以不可重复读。<br>可重复读：在这个隔离级别下，就算事务B的修改已经提交，事务A读到的数据依旧是一致的。当事务B插入一条新数据并提交之后，事务A查询不到当前数据，查询不到就以为不存在，但是事务A却可以更新这条数据成功，并且更新后再次查询，数据出现了。一开始查询不到，但能修改，再次查询又出现了，跟幻觉一样，所以称为　幻读。 [1赞]
+        </div>
+        
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            JackPn  2019-07-15 09:24:31
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            老师我感觉幻读也是不了重复读啊，都是一个事务过程中两次读到了另一个事务修改提交后的数据 [1赞]
+        </div>
+        <br/>
+<div>
+    <div style="color:#888;font-size:15.25px;font-weight:400;line-height:1.2">作者回复2019-07-15 12:08:19</div>
+    <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">首先，不可重复读 和 幻读都是在先后两次读取的时候发现不一致的情况，但是两种读取略有差别：<br>不可重复读是对于同一条记录内容的“不可重复读”<br>幻读是对于某一范围的数据集，发现查询数据集的行数多了或者少了，从而出现的不一致。<br>所以不可重复读的原因是 对于要查询的那条数据进行了UPDATE或DELETE<br>而幻读是对于要查询的 那个范围的数据集，进行了INSERT。</div>
+</div>
+            
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            0 error  0 warning 0 bug  2019-07-15 08:49:19
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            不可重复读和幻读还不是很理解，老师可以再详细讲讲吗 [1赞]
+        </div>
+        <br/>
+<div>
+    <div style="color:#888;font-size:15.25px;font-weight:400;line-height:1.2">作者回复2019-07-15 12:03:48</div>
+    <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">不可重复读 VS 幻读的区别：<br>不可重复读是同一条记录的内容被修改了，重点在于UPDATE或DELETE<br>幻读是查询某一个范围的数据行变多了或者少了，重点在于INSERT<br></div>
+</div>
+            
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            WL  2019-07-15 19:01:07
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            我不太理解可重复度的级别，为什么两次查询的结果要一样呢，一旦某条有修改两次查询结果不一样不是很正常吗？ 
+        </div>
+        
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            xcoder  2019-07-15 16:47:04
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            根据以上操作<br>mysql&gt; show variables like &#39;transaction_isolation&#39;;<br>显示 Empty Set，没显示相关隔离级别<br>我的myslq版本是5.6.37 
+        </div>
+        
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            悟空  2019-07-15 16:07:08
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            湖人总冠军。。。 
+        </div>
+        
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            一叶知秋  2019-07-15 11:03:13
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            两个问题个人理解是：<br>1）四个级别分别是无限制（可以并发读写）、写事务加锁（可以并发读、读完立刻释放锁而不是等事务结束）、读写事务都加锁（可以并发读、读写都是事务结束才释放锁）、表锁（读写事务序列化执行、单线程执行）。 时间开销依次递增所以随着隔离等级递增并发性能会降低。<br>2）区别在于不可重复读是由于其他事务的update、delete操作对数据进行了修改 重点在修改（内容修改）、幻读是其他事务由于delete、insert对表数据进行了修改重点在于数量新增、减少（数量变更）<br><br>嘿嘿个人理解，不对希望指出 &gt;o&lt; 
+        </div>
+        
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            　Hail hydra  2019-07-15 10:18:41
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            高并发的情况要保证数据的一致性就必须排队一个个来，那这不就不能算并发了么 
+        </div>
+        
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            ack  2019-07-15 07:51:22
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            事务的隔离级别是需要通过锁来保证的，想要解决的问题越多，加的锁就越多，从文章也可以看出，当想要解决幻读的时候，需要的隔离级别已经是串行化了。 
+        </div>
+        <br/>
+<div>
+    <div style="color:#888;font-size:15.25px;font-weight:400;line-height:1.2">作者回复2019-07-15 08:25:18</div>
+    <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">对 加锁是底层的实现环节，不同的事务隔离级别对应能解决不同的异常问题。在选择隔离级别的时候，我们要在正确性和性能上进行权衡取舍</div>
+</div>
+            
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            L荀  2019-07-15 07:38:22
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            不可重复读，和幻读例子中事物不用提交么 
+        </div>
+        <br/>
+<div>
+    <div style="color:#888;font-size:15.25px;font-weight:400;line-height:1.2">作者回复2019-07-15 08:46:55</div>
+    <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">一个好问题，一般来说第二个事务需要进行提交。不过在文章中，我将客户端1的隔离级别设置为了 读未提交，因此不论客户端2是否提交，都会对客户端1造成影响。<br>如果将客户端1的隔离级别设置为 读已提交，或者 可重复度。就需要对客户端2的事务进行提交，这时才会对客户端1在执行的事务产生影响。</div>
+</div>
+            
+    </div>
+</li>
+            
+<br/>
+
+<li>
+    <div>
+        <div style="color: #888;font-size:15.25px;font-weight:400;line-height:1.2">
+            墨禾  2019-07-15 06:27:22
+        </div>
+        <div style="color:#353535;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6">
+            老师，分库分表是不是可以一定程度上保证隔离性和并发访问呢？ 
+        </div>
+        
+    </div>
+</li>
+            </ul>
+</div>
+</body>
+</html>
